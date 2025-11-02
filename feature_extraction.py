@@ -15,8 +15,6 @@ FEATURE_DIR = f"{DIR}/features"
 
 os.makedirs(FEATURE_DIR, exist_ok=True)
 
-# df = pd.read_csv("dataset2/english.csv", sep=",")
-# print(df)
 
 # deskewing images means to remove the natural slant that some people
 #   have in their writing.
@@ -85,9 +83,31 @@ def gen_hog_features(input_dir:str, output_dir:str,
             print(f"Saved HOG features: {npy_path}")
 # gen_hog_features(DATA, FEATURE_DIR)
 
-def gen_hog_labels(input_dir:str, output_dir:str,
+def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
                         overwrite_prev_file: bool=False) -> None :
     """Assumes alphabetical/numerical ordering when generating labels;
        files which are processed first will have their label further 
        ahead in the label array."""
+    npy_path = os.path.join(output_dir, "ordered_labels.npy")
+    if not overwrite_prev_file and os.path.exists(npy_path) :
+        print(f"Labels already exist. Set overwrite_prev_file to True to re-generate labels.")
+        return
+    df = pd.read_csv(csv_file, sep=",")
+    df["image"] = df["image"].map(lambda x: x.lstrip("Img/").rstrip("png"))
+    df["image"] = df["image"].map(lambda x: x + "npy")
+    # idx, cols = pd.factorize(df['col'])
+    # print(df[df["image"].isin(["img031-031.npy"])].iloc[0]["label"])
+    # return
+    # print(df)
+    labels = []
+    for file in os.scandir(feature_dir) :
+        if file.is_file() :
+            # print(df["image"].isin([file.name]).any())
+            if df["image"].isin([file.name]).any() :
+                # print(df[df["image"].isin([file.name])].iloc[0]["label"])
+                labels.append(df[df["image"].isin([file.name])].iloc[0]["label"]) # gets label corresponding to file
+                print(f"label {df[df['image'].isin([file.name])].iloc[0]['label']} added to labels.")
+    np.save(npy_path, np.array(labels))
+
+gen_hog_labels("dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, True)
 
