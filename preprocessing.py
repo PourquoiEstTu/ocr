@@ -3,12 +3,11 @@ import sys
 import cv2
 import pandas as pd
 import numpy as np
-from skimage.feature import hog
-import matplotlib.pyplot as plt
 
 # print numpy arrays without truncation
 # np.set_printoptions(threshold=sys.maxsize)
 
+# any of these can be changed to reflect your own directories
 DIR = "/windows/Users/thats/Documents/ocr-repo-files"
 DATA = "dataset2/Img"  # set directory path
 FEATURE_DIR = f"{DIR}/features"
