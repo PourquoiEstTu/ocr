@@ -50,9 +50,6 @@ hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
     winSigma,histogramNormType,L2HysThreshold,
     gammaCorrection,nlevels, useSignedGradients)
 
-im_test =  cv2.imread(f'{DATA}/img023-034.png',0)
-descriptor = hog.compute(im_test)
-
 def gen_hog_features(input_dir:str, output_dir:str,
                         overwrite_prev_files: bool=False) -> None :
     for file in os.scandir(input_dir) :
