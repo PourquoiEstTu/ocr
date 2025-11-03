@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import preprocessing as pre
 import torch
@@ -13,10 +14,9 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 first_train_file = 0
 last_train_file = 100
 X_train, y_train = pre.get_same_length_features_and_labels(
-        f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 
+        f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR,
             first_train_file, last_train_file)
 X_train_feature_len = X_train.shape[1]
-# print(X_train_feature_len)
 
 # convert y's letters to numerals
 le_train = LabelEncoder()
@@ -29,11 +29,11 @@ X_test, y_test = pre.get_same_length_features_and_labels(
         f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR,
             first_test_file, last_test_file)
 X_test_feature_len = X_test.shape[1]
+# print(X_test_feature_len)
+# sys.exit()
 
 le_test = LabelEncoder()
 y_test_numeric = le_test.fit_transform(y_test)
-# print(X.shape)
-# print(y_test_numeric)
 
 X_train = torch.from_numpy(X_train).type(torch.float) # convert to tensors
 y_train = torch.from_numpy(y_train_numeric).type(torch.float)
@@ -44,9 +44,9 @@ y_test = torch.from_numpy(y_test_numeric).type(torch.float)
 class LetterPredictor(nn.Module):
     def __init__(self):
         super().__init__()
-        self.layer_1 = nn.Linear(in_features=X_train_feature_len, 
-                                    out_features=100000)
-        self.layer_2 = nn.Linear(in_features=100000, out_features=1)
+        self.layer_1 = nn.Linear(in_features=X_train_feature_len,
+                                    out_features=50000)
+        self.layer_2 = nn.Linear(in_features=50000, out_features=1)
     
     def forward(self, x):
         return self.layer_2(self.layer_1(x)) 
