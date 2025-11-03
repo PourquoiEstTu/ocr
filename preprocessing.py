@@ -33,9 +33,9 @@ os.makedirs(FEATURE_DIR, exist_ok=True)
 #     return img
 
 winSize = (450,600) # size of inputted images
-cellSize = (15,20) # (450/30, 600/30)
-blockSize = (30,40) # typically set to 2*cellSize
-blockStride = (15,20) # typically set to 50% of blockSize.
+cellSize = (45,60) # winSize / 10
+blockSize = (90,120) # typically set to 2*cellSize
+blockStride = (45,60) # typically set to 50% of blockSize.
 nbins = 9
 derivAperture = 1
 winSigma = -1.
@@ -66,7 +66,7 @@ def gen_hog_features(input_dir:str, output_dir:str,
             descriptor = hog.compute(img)
             np.save(npy_path, descriptor)
             print(f"Saved HOG features: {npy_path}")
-# gen_hog_features(DATA, FEATURE_DIR)
+# gen_hog_features(DATA, FEATURE_DIR, True)
 
 def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
                         overwrite_prev_file: bool=False) -> None :
@@ -87,7 +87,6 @@ def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
                 labels.append(df[df["image"].isin([file.name])].iloc[0]["label"]) # gets label corresponding to file
                 print(f"label {df[df['image'].isin([file.name])].iloc[0]['label']} added to labels.")
     np.save(npy_path, np.array(labels))
-
 # gen_hog_labels("dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, True)
 
 # 2000+ files being loaded breaks my computer, so added nfiles param :(
@@ -103,7 +102,7 @@ def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
         if file_count >= nfiles :
             break
     return np.array(X)
-# concatenate_features(FEATURE_DIR)
+# concatenate_features(FEATURE_DIR,)
 
 # horrendous function name
 def get_same_length_features_and_labels(label_file: str, feature_dir: str,
