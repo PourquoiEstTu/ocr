@@ -33,9 +33,9 @@ os.makedirs(FEATURE_DIR, exist_ok=True)
 #     return img
 
 winSize = (450,600) # size of inputted images
-cellSize = (30,40) # (250/30, 600/30)
-blockSize = (60,80) # typically set to 2*cellSize
-blockStride = (30,40) # typically set to 50% of blockSize.
+cellSize = (9,12) # (250/30, 600/30)
+blockSize = (18,24) # typically set to 2*cellSize
+blockStride = (9,12) # typically set to 50% of blockSize.
 nbins = 9
 derivAperture = 1
 winSigma = -1.
@@ -90,3 +90,26 @@ def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
 
 # gen_hog_labels("dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, True)
 
+# 2000+ files being loaded breaks my computer, so added nfiles param :(
+def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
+    X = []
+    file_count = 0
+    for file in os.scandir(feature_dir) :
+        if ( file.name != "ordered_labels.npy" ) and ( file.is_file() ) :
+            X.append( np.load(f"{feature_dir}/{file.name}") )
+        file_count += 1
+        if file_count >= nfiles :
+            break
+    return np.array(X)
+# concatenate_features(FEATURE_DIR)
+
+# horrendous function name
+def get_same_length_features_and_labels(label_file: str, feature_dir: str,
+                                nfiles: int=100) -> (np.ndarray, np.ndarray) :
+    features = concatenate_features(feature_dir, nfiles)
+    truncated_labels = np.load(label_file)[:nfiles]
+    return ( features, truncated_labels )
+# print(len(get_same_length_features_and_labels(
+#     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
+# print(len(get_same_length_features_and_labels(
+#     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[1]) )
