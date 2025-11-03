@@ -51,22 +51,8 @@ hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
     winSigma,histogramNormType,L2HysThreshold,
     gammaCorrection,nlevels, useSignedGradients)
 
-# for entry in os.scandir(directory):  
-    # if entry.is_file():  # check if it's a file
-        # print(entry.path)
 im_test =  cv2.imread(f'{DATA}/img023-034.png',0)
 descriptor = hog.compute(im_test)
-# descriptor.shape
-# print(hog.getDescriptorSize())
-# print(descriptor.shape)
-# im_test = cv2.resize(im_test, (0,0), fx=0.5, fy=0.5) 
-# print(im_test.shape)
-# _,hog_img = hog(im_test,orientations=9,pixels_per_cell=(8,8), cells_per_block=(1, 1),visualize=True)
-# print(hog_img.shape)
-
-# cv2.imshow('', hog_img)#, cmap='gray')
-# cv2.imshow("", im_test)
-# cv2.waitKey(0) # == ord('q')
 
 def gen_hog_features(input_dir:str, output_dir:str,
                         overwrite_prev_files: bool=False) -> None :
@@ -95,19 +81,13 @@ def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
     df = pd.read_csv(csv_file, sep=",")
     df["image"] = df["image"].map(lambda x: x.lstrip("Img/").rstrip("png"))
     df["image"] = df["image"].map(lambda x: x + "npy")
-    # idx, cols = pd.factorize(df['col'])
-    # print(df[df["image"].isin(["img031-031.npy"])].iloc[0]["label"])
-    # return
-    # print(df)
     labels = []
     for file in os.scandir(feature_dir) :
         if file.is_file() :
-            # print(df["image"].isin([file.name]).any())
             if df["image"].isin([file.name]).any() :
-                # print(df[df["image"].isin([file.name])].iloc[0]["label"])
                 labels.append(df[df["image"].isin([file.name])].iloc[0]["label"]) # gets label corresponding to file
                 print(f"label {df[df['image'].isin([file.name])].iloc[0]['label']} added to labels.")
     np.save(npy_path, np.array(labels))
 
-gen_hog_labels("dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, True)
+# gen_hog_labels("dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, True)
 
