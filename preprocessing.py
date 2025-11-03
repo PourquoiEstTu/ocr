@@ -89,7 +89,9 @@ def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
     np.save(npy_path, np.array(labels))
 # gen_hog_labels("dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, True)
 
-# 2000+ files being loaded breaks my computer, so added nfiles param :(
+# with winSize / 50, 2000+ files being loaded breaks my computer, 
+#   so added nfiles param :(
+# with winSize / 10, 3100 files can be loaded
 def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
     """Takes a directory with npy files containing 1D arrays 
        and concatenates them into one array"""
