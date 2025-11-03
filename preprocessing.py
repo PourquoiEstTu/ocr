@@ -33,9 +33,9 @@ os.makedirs(FEATURE_DIR, exist_ok=True)
 #     return img
 
 winSize = (450,600) # size of inputted images
-cellSize = (9,12) # (250/30, 600/30)
-blockSize = (18,24) # typically set to 2*cellSize
-blockStride = (9,12) # typically set to 50% of blockSize.
+cellSize = (15,20) # (450/30, 600/30)
+blockSize = (30,40) # typically set to 2*cellSize
+blockStride = (15,20) # typically set to 50% of blockSize.
 nbins = 9
 derivAperture = 1
 winSigma = -1.
@@ -92,6 +92,8 @@ def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
 
 # 2000+ files being loaded breaks my computer, so added nfiles param :(
 def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
+    """Takes a directory with npy files containing 1D arrays 
+       and concatenates them into one array"""
     X = []
     file_count = 0
     for file in os.scandir(feature_dir) :
@@ -105,9 +107,12 @@ def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
 
 # horrendous function name
 def get_same_length_features_and_labels(label_file: str, feature_dir: str,
-                                nfiles: int=100) -> (np.ndarray, np.ndarray) :
-    features = concatenate_features(feature_dir, nfiles)
-    truncated_labels = np.load(label_file)[:nfiles]
+            start_idx: int=0, end_idx: int=100) -> (np.ndarray, np.ndarray) :
+    """Specify some starting index and ending index to get the features
+       from feature_dir in that range along with their corresponding
+       labels"""
+    features = concatenate_features(feature_dir, end_idx)[start_idx:]
+    truncated_labels = np.load(label_file)[start_idx:end_idx]
     return ( features, truncated_labels )
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
