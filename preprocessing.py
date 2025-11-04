@@ -8,8 +8,11 @@ import numpy as np
 # np.set_printoptions(threshold=sys.maxsize)
 
 # any of these can be changed to reflect your own directories
-DIR = "/windows/Users/thats/Documents/ocr-repo-files"
-DATA = "dataset2/Img"  # set directory path
+# DIR = "/windows/Users/thats/Documents/ocr-repo-files"
+# DATA = "dataset2/Img"  # set directory path
+# FEATURE_DIR = f"{DIR}/features"
+DIR = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files"
+DATA = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/Img"  # set directory path
 FEATURE_DIR = f"{DIR}/features"
 
 os.makedirs(FEATURE_DIR, exist_ok=True)
@@ -116,3 +119,6 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[1]) )
+
+# gen_hog_features(DATA, FEATURE_DIR, False)
+# gen_hog_labels("/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, False) 
