@@ -95,11 +95,16 @@ def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
 def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
     """Takes a directory with npy files containing 1D arrays 
        and concatenates them into one array"""
+    # fix issue of unordered files by sorting them
+    files = sorted(
+        [f for f in os.listdir(feature_dir) if f.endswith(".npy") and f != "ordered_labels.npy"]
+    )
     X = []
     file_count = 0
-    for file in os.scandir(feature_dir) :
-        if ( file.name != "ordered_labels.npy" ) and ( file.is_file() ) :
-            X.append( np.load(f"{feature_dir}/{file.name}") )
+    for file in files:
+        # print(f"Processing file: {file}")
+        # if ( file.name != "ordered_labels.npy" ) and ( file.is_file() ) :
+        X.append( np.load(f"{feature_dir}/{file}") )
         file_count += 1
         if file_count >= nfiles :
             break
@@ -113,6 +118,7 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
        from feature_dir in that range along with their corresponding
        labels"""
     features = concatenate_features(feature_dir, end_idx)[start_idx:]
+    # print(np.load(label_file)[start_idx:end_idx])
     truncated_labels = np.load(label_file)[start_idx:end_idx]
     return ( features, truncated_labels )
 # print(len(get_same_length_features_and_labels(
