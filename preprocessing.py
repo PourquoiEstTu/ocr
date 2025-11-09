@@ -97,22 +97,25 @@ def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
     for file in os.scandir(feature_dir) :
         if ( file.name != "ordered_labels.npy" ) and ( file.is_file() ) :
             X.append( np.load(f"{feature_dir}/{file.name}") )
+            # print(np.load(f"{feature_dir}/{file.name}"))
         file_count += 1
-        if file_count >= nfiles :
+        if file_count > nfiles :
             break
     return np.array(X)
-# concatenate_features(FEATURE_DIR,)
+# print(concatenate_features(FEATURE_DIR,5))
 
 # horrendous function name
 def get_same_length_features_and_labels(label_file: str, feature_dir: str,
-            start_idx: int=0, end_idx: int=100) -> (np.ndarray, np.ndarray) :
+            start_idx: int=0, end_idx: int=100) -> tuple[np.ndarray, np.ndarray] :
     """Specify some starting index and ending index to get the features
        from feature_dir in that range along with their corresponding
        labels"""
+    # inefficient to get all features from 0 to end_idx and then remove a bunch of them
     features = concatenate_features(feature_dir, end_idx)[start_idx:]
+    # print(features)
     truncated_labels = np.load(label_file)[start_idx:end_idx]
-    return ( features, truncated_labels )
-# print(len(get_same_length_features_and_labels(
-#     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
+    return features, truncated_labels
+# print(get_same_length_features_and_labels(
+#     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 5)[0].tolist())
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[1]) )
