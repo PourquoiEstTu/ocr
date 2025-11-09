@@ -9,7 +9,7 @@ DIR = "/windows/Users/thats/Documents/ocr-repo-files"
 DATA = "dataset2/Img"
 FEATURE_DIR = f"{DIR}/features"
 
-def get_X_y_data(num_of_files: int, input_dir: str, path_to_label: str) -> tuple[np.ndarray, np.ndarray] :
+def get_X_y_data(num_of_files: int, total_files:int, input_dir: str, path_to_label: str) -> tuple[np.ndarray, np.ndarray] :
     if num_of_files <= 0 :
         raise ValueError("Please enter a positive number as the first argument")
     rng = np.random.default_rng()
@@ -17,7 +17,7 @@ def get_X_y_data(num_of_files: int, input_dir: str, path_to_label: str) -> tuple
     y = []
     for _ in range(num_of_files) :
         count = 0
-        idx = rng.integers(0, num_of_files)
+        idx = rng.integers(0, total_files)
         for file in os.scandir(input_dir) :
             if count == idx :
                 # print(count)
@@ -63,27 +63,29 @@ class MulticlassSvm :
 def main() :
     # init data
     # i can't use all 3411 files b/c I don't have enough ram
-    num_of_files = 1000
-    X,y = get_X_y_data(num_of_files, FEATURE_DIR, f"{FEATURE_DIR}/ordered_labels.npy")
+    num_of_files = 100
+    X,y = get_X_y_data(num_of_files, 3410, FEATURE_DIR, f"{FEATURE_DIR}/ordered_labels.npy")
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
                                                                 random_state=42)
     print("here1")
     # convert y's letters to numerals
-    le_train = LabelEncoder()
-    le_test = LabelEncoder()
-    y_train_numeric = le_train.fit_transform(y_train)
-    y_test_numeric = le_test.fit_transform(y_test)
+    # le_train = LabelEncoder()
+    # le_test = LabelEncoder()
+    # y_train_numeric = le_train.fit_transform(y_train)
+    # y_test_numeric = le_test.fit_transform(y_test)
     print("here2")
     # print(le_train.classes_)
     # print(y_train_numeric)
     # print(le_train.inverse_transform([1]))
 
     svc = MulticlassSvm("SVC")
+    print(y_train)
+    print(y_test)
     svc.fit(X_train, y_train)
     print("here3")
-    prediction = svc.predict([X_test[0]]).astype(np.int64)
+    prediction = svc.predict([X_test[0]])#.astype(np.int64)
     print(f"X_test[0] prediction = {prediction}")
     print(f"y_test[0] true label = {y_test[0]}")
-    print(f"label given by svm: {le_train.inverse_transform(prediction)}")
+    # print(f"label given by svm: {le_train.inverse_transform(prediction)}")
     # print(le_train.classes_)
 main()
