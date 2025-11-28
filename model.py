@@ -1,5 +1,5 @@
 import sys
-# import sys; sys.path.append("/nfs/u50/chandd9/sklearn_portable") # used on server sometimes
+import sklearn
 import numpy as np
 import preprocessing as pre
 import torch
@@ -8,19 +8,17 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 from torch.utils.data import DataLoader, TensorDataset
-import os
 import joblib
+import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
-print("started")
-
 # DIR = "/windows/Users/thats/Documents/ocr-repo-files"
 # DATA = "dataset2/Img"
-DIR = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files"
-DATA = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/Img"  # set directory path
-FEATURE_DIR = f"{DIR}/features"
+DIR = r"/u50/chandd9/al3/"
+# DATA = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/Img"  # set directory path
+FEATURE_DIR = f"{DIR}/../features"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # since we are using HOG features, we can use a simple NN for now?
@@ -82,17 +80,8 @@ if __name__ == "__main__":
     # convert y's letters to numerals
     # y_train is a list of the labels corresponding to each features in X_train
     # this encoder will convert those letters to numerical values used for training
-    # eg. a -> 0, b -> 1
     le = LabelEncoder()
     y_train_numeric = le.fit_transform(y_train)
-
-    ##### Moved to train set creation above
-    # first_test_file = 1001
-    # last_test_file = 1501
-    # X_test, y_test = pre.get_same_length_features_and_labels(
-    #         f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR,
-    #             first_test_file, last_test_file)
-    # X_test_feature_len = X_test.shape[1]
 
     # create label encoders for test set as well
     # use the same letters as training set.
@@ -136,10 +125,11 @@ if __name__ == "__main__":
     # Use a cross entropy loss for now, good to use for multi class classification which is what we are doing
     loss_fn = nn.CrossEntropyLoss()
 
-    # adam optimizer?
+    # adam optimizer? just use for now
+    # who tf is adam???
     # need to look into more
     # optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-3)
-    # Use SGD for speed reasons
+    # nvm i hate adam lets use sgd
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01,weight_decay=1e-3)
 
     # batch creations
@@ -209,7 +199,7 @@ if __name__ == "__main__":
     # save model
     torch.save(model.state_dict(), f"{DIR}/ocr_model.pth")
 
-    # saving encoder and scaler for future use
+    # should i save the label encoder and scaler too? probably
     joblib.dump(le, f"{DIR}/label_encoder.joblib")
     joblib.dump(scaler, f"{DIR}/scaler.joblib")
     
@@ -246,5 +236,10 @@ if __name__ == "__main__":
     plt.yticks(rotation=0)
     plt.tight_layout()
     plt.savefig(f"./confusion_matrix.png", dpi=300)
+
+    # disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=le.classes_)
+    # disp.plot(xticks_rotation='vertical', cmap='Blues')
+    # plt.title("Character Confusion Matrix")
+    # plt.savefig(f"./confusion_matrix.png", dpi=500)
 
 print("end of model.py")
