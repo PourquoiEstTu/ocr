@@ -11,11 +11,12 @@ import numpy as np
 # DIR = "/windows/Users/thats/Documents/ocr-repo-files"
 # DATA = "dataset2/Img"  # set directory path
 # FEATURE_DIR = f"{DIR}/features"
-DIR = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files"
-DATA = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/Img"  # set directory path
+# DIR = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files"
+# DATA = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/Img"  # set directory path
+DIR = r"/u50/chandd9/al3/"
 FEATURE_DIR = f"{DIR}/features"
 
-os.makedirs(FEATURE_DIR, exist_ok=True)
+# os.makedirs(FEATURE_DIR, exist_ok=True)
 
 
 # deskewing images means to remove the natural slant that some people
@@ -55,6 +56,8 @@ hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
 
 def gen_hog_features(input_dir:str, output_dir:str,
                         overwrite_prev_files: bool=False) -> None :
+    """Generates HOG features for all images in input_dir and saves them
+       as .npy files in output_dir."""
     for file in os.scandir(input_dir) :
         if file.is_file() :
             npy_path = os.path.join(output_dir, f"{file.name.strip('.png')}.npy")
@@ -108,7 +111,7 @@ def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
         file_count += 1
         if file_count >= nfiles :
             break
-    return np.array(X)
+    return np.array(X), files
 # concatenate_features(FEATURE_DIR,)
 
 # horrendous function name
@@ -117,10 +120,10 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
     """Specify some starting index and ending index to get the features
        from feature_dir in that range along with their corresponding
        labels"""
-    features = concatenate_features(feature_dir, end_idx)[start_idx:]
+    features, file_names = concatenate_features(feature_dir, end_idx)[start_idx:]
     # print(np.load(label_file)[start_idx:end_idx])
     truncated_labels = np.load(label_file)[start_idx:end_idx]
-    return ( features, truncated_labels )
+    return ( features, truncated_labels, file_names)
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
 # print(len(get_same_length_features_and_labels(
@@ -128,3 +131,9 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
 
 # gen_hog_features(DATA, FEATURE_DIR, False)
 # gen_hog_labels("/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/english.csv", FEATURE_DIR, FEATURE_DIR, False) 
+
+
+# for file in os.scandir("/u50/chandd9/al3/ocr-repo-files/Img") :
+#     if file.is_file() :
+#         img = cv2.imread(f"/u50/chandd9/al3/ocr-repo-files/Img/{file.name}",0)
+#         print(img.shape)
