@@ -12,6 +12,10 @@ DIR = "/windows/Users/thats/Documents/ocr-repo-files"
 DATA = "dataset2/Img"  # set directory path
 FEATURE_DIR = f"{DIR}/features"
 
+MNIST_DIR = f"{DIR}/mnist"
+MNIST_DATA = f"{DIR}/mnist/dataset/v011_words_small"
+MNIST_JSON = f"{DIR}/mnist/v011_labels_small.json"
+
 os.makedirs(FEATURE_DIR, exist_ok=True)
 
 
@@ -45,10 +49,10 @@ gammaCorrection = 1
 nlevels = 64
 useSignedGradients = False
 
-hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
-    cellSize,nbins,derivAperture,
-    winSigma,histogramNormType,L2HysThreshold,
-    gammaCorrection,nlevels, useSignedGradients)
+# hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
+#     cellSize,nbins,derivAperture,
+#     winSigma,histogramNormType,L2HysThreshold,
+#     gammaCorrection,nlevels, useSignedGradients)
 
 def gen_hog_features(input_dir:str, output_dir:str,
                         overwrite_prev_files: bool=False) -> None :
@@ -116,3 +120,51 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[1]) )
+
+def sorting_criteria(l) : # sort contours by first coordinate stored
+    return l[0][0][0]
+
+def segment_word(img_path: str) :
+    """Takes a path to an image with a single word in it and outputs 
+       a group of images with each character in the word on a simple
+       image."""
+    og_img = cv2.imread(img_path)
+    img = cv2.cvtColor(og_img,cv2.COLOR_BGR2GRAY)
+    # img = cv2.GaussianBlur(img,(3, 3), 0)
+    img = cv2.medianBlur(img, 3)
+    _, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+    # kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
+    # img = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
+    # thresh_color = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+    img = cv2.dilate(img, (0.5,0.5), iterations=20)
+    # img = cv2.erode(img, (3, 15), iterations=15)
+
+    contours,hierarchy = cv2.findContours(img,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+    contours = list(contours)
+    contours.sort(key=sorting_criteria)
+    characters = []
+    # print(contours)
+    for cnt in contours:
+        x,y,w,h = cv2.boundingRect(cnt)
+        characters.append(og_img[y:y+h, x:x+w])
+        # print(cnt)
+        # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
+        # cv2.rectangle(og_img,(x,y),(x+w,y+h),(0,255,0),1)
+    # cv2.imshow('', img)
+    # cv2.imshow('', og_img)
+    # cv2.imshow('', thresh_color)
+    # for c in characters :
+    #     cv2.imshow('', c)
+    #     cv2.waitKey(0)
+    # cv2.waitKey(0)
+    return characters
+# segment_word(f"{MNIST_DATA}/4.png")
+# segment_word(f"{MNIST_DATA}/28.png")
+# segment_word(f"{MNIST_DATA}/27.png")
+# segment_word(f"{MNIST_DATA}/31.png")
+# segment_word(f"{MNIST_DATA}/26.jpeg")
+# segment_word(f"{MNIST_DATA}/50.jpeg") # does not work very good on this
+# segment_word(f"{MNIST_DATA}/53.png")
+# segment_word(f"{MNIST_DATA}/61.png")
+# segment_word(f"{MNIST_DATA}/63.jpeg") # appears to not work too well on u's and y's?
+# segment_word(f"{MNIST_DATA}/65.png")
