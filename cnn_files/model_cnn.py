@@ -16,36 +16,35 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import joblib
 
-import preprocessing_nn as pre
+import preprocessing_cnn as pre
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 DIR = r"/u50/chandd9/al3/"
-FEATURE_DIR = f"/u50/chandd9/al3/ocr-pixel-combined"
+FEATURE_DIR = f"/u50/chandd9/al3/ocr-pixel-nested-V2-fixed"
 
 
 dimension = 64  # resized to 64x64 pixels
 
-
-# --------------------------
 # CNN MODEL
-# --------------------------
 class CNNModel(nn.Module):
     def __init__(self, input_size=(dimension, dimension), out_size=10):
         super().__init__()
 
         self.input_h, self.input_w = input_size
 
-        self.conv1 = nn.Conv2d(1, 32, 3, padding=1)
+        self.conv1 = nn.Conv2d(1, 32, 5, padding=2)
+        self.bn1 = nn.BatchNorm2d(32)
         self.conv2 = nn.Conv2d(32, 64, 3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
         self.conv3 = nn.Conv2d(64, 128, 3, padding=1)
-
+        self.bn3 = nn.BatchNorm2d(128)
         self.pool = nn.MaxPool2d(2, 2)
         self.drop2d = nn.Dropout2d(0.2)
 
         # Compute flattened size
-        h = self.input_h // 2 // 2 // 2
-        w = self.input_w // 2 // 2 // 2
-        fc_input_dim = 128 * h * w
+        # h = self.input_h // 2 // 2 // 2
+        # w = self.input_w // 2 // 2 // 2
+        fc_input_dim = 128 * 8 * 8
 
         self.fc1 = nn.Linear(fc_input_dim, 256)
         self.fc2 = nn.Linear(256, out_size)
@@ -53,15 +52,15 @@ class CNNModel(nn.Module):
 
     def forward(self, x):
         # x: [B,1,H,W]
-        x = F.relu(self.conv1(x))
+        x = F.relu(self.bn1(self.conv1(x)))
         x = self.pool(x)
         x = self.drop2d(x)
 
-        x = F.relu(self.conv2(x))
+        x = F.relu(self.bn2(self.conv2(x)))
         x = self.pool(x)
         x = self.drop2d(x)
 
-        x = F.relu(self.conv3(x))
+        x = F.relu(self.bn3(self.conv3(x)))
         x = self.pool(x)
         x = self.drop2d(x)
 
@@ -72,9 +71,7 @@ class CNNModel(nn.Module):
         return x
 
 
-# ------------------------------------------
 # MAIN
-# ------------------------------------------
 if __name__ == "__main__":
 
     # Load features and labels
@@ -129,9 +126,7 @@ if __name__ == "__main__":
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01, weight_decay=1e-3)
 
-    # -------------------
     # Training loop
-    # -------------------
     epochs = 100
     best_acc = 0
     patience = 10
@@ -151,7 +146,7 @@ if __name__ == "__main__":
 
         train_loss = running_loss / len(train_loader.dataset)
 
-        # ---- Eval ----
+        # Eval on test set
         model.eval()
         correct = 0
         total = 0
@@ -184,23 +179,12 @@ if __name__ == "__main__":
         if epoch % 5 == 0:
             print(f"Epoch {epoch:03d} | TrainLoss={train_loss:.4f} | TestLoss={test_loss:.4f} | Acc={test_acc:.2f}%")
 
-    # --------------------
-    # Save everything
-    # --------------------
+    # Save model and label encoder
     os.makedirs(DIR, exist_ok=True)
     torch.save(model.state_dict(), f"{DIR}/ocr_model.pth")
     joblib.dump(le, f"{DIR}/label_encoder.joblib")
 
-    # --------------------
-    # Final evaluation
-    # --------------------
-    # model.eval()
-    # with torch.inference_mode():
-    #     logits = model(X_test)
-    #     preds = logits.argmax(1).cpu().numpy()
-
-    # true_labels = le.inverse_transform(y_test.cpu().numpy())
-    # pred_labels = le.inverse_transform(preds)
+    # Final Overall Model Evaluation
     test_dataset = TensorDataset(X_test, y_test)
     test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)  # adjust batch_size if needed
 
