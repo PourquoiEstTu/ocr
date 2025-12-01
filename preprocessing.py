@@ -121,9 +121,6 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[1]) )
 
-def sorting_criteria(l) : # sort contours by first coordinate stored
-    return l[0][0][0]
-
 def segment_word(img_path: str) :
     """Takes a path to an image with a single word in it and outputs 
        a group of images with each character in the word on a simple
@@ -141,14 +138,15 @@ def segment_word(img_path: str) :
 
     contours,hierarchy = cv2.findContours(img,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
     contours = list(contours)
+    def sorting_criteria(l) : # sort contours by first coordinate stored
+        return l[0][0][0]
     contours.sort(key=sorting_criteria)
     characters = []
     # print(contours)
     for cnt in contours:
         x,y,w,h = cv2.boundingRect(cnt)
         characters.append(og_img[y:y+h, x:x+w])
-        # print(cnt)
-        # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
+        # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2) # visualization
         # cv2.rectangle(og_img,(x,y),(x+w,y+h),(0,255,0),1)
     # cv2.imshow('', img)
     # cv2.imshow('', og_img)
@@ -168,3 +166,75 @@ def segment_word(img_path: str) :
 # segment_word(f"{MNIST_DATA}/61.png")
 # segment_word(f"{MNIST_DATA}/63.jpeg") # appears to not work too well on u's and y's?
 # segment_word(f"{MNIST_DATA}/65.png")
+
+# implements character segmentation in the 'A New Character Segmentation Approach 
+#   for Off-Line Cursive Handwritten Words' paper at 
+#   https://www.researchgate.net/publication/257719290_A_New_Character_Segmentation_Approach_for_Off-Line_Cursive_Handwritten_Words"""
+def potential_segmentation_columns(img_path: str) :
+    og_img = cv2.imread(img_path)
+    img = cv2.cvtColor(og_img,cv2.COLOR_BGR2GRAY)
+    h,w = img.shape
+    print(f"height = {h}, width = {w}")
+    seg_cols = np.zeros(w) # entry i is 1 if i is a potential segmentation column (pcs)
+    # magic number to decide whether a column has enough black pixels to be 
+    #   a pcs
+    seg_threshold = 0.023*h # usually is around < 1 
+    # print(h,w)
+    # return
+    # img = cv2.GaussianBlur(img, (3,3),0)
+    # img = cv2.bilateralFilter(img, 15, 41, 21)
+    # img = cv2.medianBlur(img, 1) # little too strong on some images
+    _, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+    # print(img[15,10])
+    # thresh_color = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+    # img = cv2.erode(img, (3, 3), iterations=2)
+    img = cv2.ximgproc.thinning(img, cv2.ximgproc.THINNING_ZHANGSUEN)
+    for i in range(w) :
+        sum = 0
+        for j in range(h) :
+            sum += img[j,i] // 255 # make sure white pixels have value 1
+            # cv2.rectangle(drawing,(i,j),(i+10,j+10),(100,100,0),1) # visualization
+        if sum < seg_threshold :
+            seg_cols[i] = 1
+            # cv2.line(og_img, (i,0), (i,h-1), (0,0,255),2)
+    print(seg_cols)
+    # remove pcs at beginning of image
+    for i in range(w) :
+        if seg_cols[i] == 1 :
+            seg_cols[i] = 0
+        else :
+            break
+    # remove pcs at end of image
+    for i in range(w-1, -1, -1) :
+        if seg_cols[i] == 1 :
+            seg_cols[i] = 0
+        else :
+            break
+    # average out block of columns into one columns
+    for i in range(w) :
+        if seg_cols[i] == 1 :
+            num_of_consecutive_cols = 1
+            for j in range(i,w) :
+                if seg_cols[i] == 1 :
+                    # finish tmr
+    # print(seg_cols)
+    # cv2.waitKey(0)
+    while 1 :
+        cv2.imshow('', og_img)
+        k = cv2.waitKey(100000)
+        if k==27:    # Esc key to stop
+            break
+        elif k==-1:  # normally -1 returned,so don't print it
+            continue
+# potential_segmentation_columns(f"{MNIST_DATA}/4.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/14.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/39.jpeg")
+# potential_segmentation_columns(f"{MNIST_DATA}/28.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/27.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/31.png")
+potential_segmentation_columns(f"{MNIST_DATA}/26.jpeg")
+# potential_segmentation_columns(f"{MNIST_DATA}/50.jpeg")
+# potential_segmentation_columns(f"{MNIST_DATA}/53.png")
+#potential_segmentation_columns(f"{MNIST_DATA}/61.png")
+#potential_segmentation_columns(f"{MNIST_DATA}/63.jpeg") 
+#potential_segmentation_columns(f"{MNIST_DATA}/65.png")
