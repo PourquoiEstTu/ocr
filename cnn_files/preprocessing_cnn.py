@@ -13,7 +13,7 @@ DIR = r"/u50/chandd9/al3/"
 FEATURE_DIR = f"{DIR}/ocr-pixel"
 DATA = f"{DIR}/ocr-repo-files/Img"  # set directory path
 
-# Functions used for dataset 1 (3410 images) -----------------------------------------------------------------------
+# Functions used for dataset 1 (3410 images) (not in use anymore) -----------------------------------------------------------------------
 def gen_pixel_features(input_dir:str, output_dir:str, overwrite_prev_files: bool=False) -> None :
     """Generates pixel features for all images in input_dir and saves them
        as .npy files in output_dir."""
@@ -52,12 +52,14 @@ def gen_pixel_labels(input_dir:str, output_file:str, overwrite_prev_file=False) 
         # exit()
     np.save(output_file, np.array(labels))
 
-# Functions used for dataset 2 (210k images) (not handwritten tho) -------------------------------------------------
-def gen_pixel_features_nested(input_dir: str, output_dir: str, overwrite_prev_files: bool = False) -> None:
+# Functions used for dataset 2 (210k images) (currently used) -------------------------------------------------
+def old_gen_pixel_features_nested(input_dir: str, output_dir: str, overwrite_prev_files: bool = False) -> None:
     """
     Scans input_dir for subfolders (class names), loads images inside them,
     preprocesses them into CNN-ready pixel tensors, and saves .npy files with
     names like 'u_L_1.npy', 'u_L_2.npy', '1_1.npy', etc.
+
+    not in use anymore, replaced by gen_pixel_features_nested_fixed
     """
 
     os.makedirs(output_dir, exist_ok=True)
@@ -93,16 +95,109 @@ def gen_pixel_features_nested(input_dir: str, output_dir: str, overwrite_prev_fi
                 continue
 
             # Resize to 64×64
-            img = cv2.resize(img, (64, 64))
+            # img = cv2.resize(img, (64, 64))
 
             # Normalize to [0,1]
             img = img.astype(np.float32) / 255.0
 
+            # resize while preserving aspect ratio
+            h, w = img.shape
+            target_h, target_w = 64, 64
+            # trying 96x96
+            # target_h, target_w = 96, 96
+            scale = min(target_w / w, target_h / h)
+            new_w = int(w * scale)
+            new_h = int(h * scale)
+            resized = cv2.resize(img, (new_w, new_h))
+
+            # Pad to center the image
+            canvas = np.zeros((target_h, target_w), dtype=np.float32)  # white background
+            y_offset = (target_h - new_h) // 2
+            x_offset = (target_w - new_w) // 2
+            canvas[y_offset:y_offset+new_h, x_offset:x_offset+new_w] = resized
+
             # Add channel dimension → (1, 64, 64)
-            img = np.expand_dims(img, axis=0)
+            img = np.expand_dims(canvas, axis=0)
 
             # Save as .npy
             np.save(out_path, img)
+            print(f"Saved: {out_name}")
+
+            image_counter += 1
+
+def gen_pixel_features_nested_fixed(input_dir: str, output_dir: str, overwrite_prev_files: bool = False) -> None:
+    """
+    Loads images, crops text using brightness threshold, resizes while preserving
+    aspect ratio, centers on 64x64 white background, and saves as .npy.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    for folder in os.scandir(input_dir):
+        if not folder.is_dir():
+            continue
+        
+        class_name = folder.name
+        print(f"Processing class folder: {class_name}")
+        image_counter = 1
+
+        for file in os.scandir(folder.path):
+            if not file.is_file():
+                continue
+
+            out_name = f"{class_name}_{image_counter}.npy"
+            out_path = os.path.join(output_dir, out_name)
+
+            if not overwrite_prev_files and os.path.exists(out_path):
+                image_counter += 1
+                continue
+
+            # Load grayscale
+            img = cv2.imread(file.path, cv2.IMREAD_GRAYSCALE)
+            if img is None:
+                print(f"Skipping unreadable file: {file.path}")
+                continue
+
+            # Convert to uint8 if needed
+            if img.dtype != np.uint8:
+                img = img.astype(np.uint8)
+
+            # CROP IMAGE
+            # Mask of all pixels that are NOT near-white
+            mask = img < 200  # treat pixels < 200 as non-white
+
+            if np.any(mask):
+                coords = np.column_stack(np.where(mask))
+                y_min, x_min = coords.min(axis=0)
+                y_max, x_max = coords.max(axis=0)
+                img = img[y_min:y_max+1, x_min:x_max+1]
+            # else: full white image → leave as-is
+
+            # Convert to float32 [0,1] AFTER cropping
+            img = img.astype(np.float32) / 255.0
+
+            # RESIZE WITH ASPECT RATIO PRESERVATION
+            target_h, target_w = 64, 64
+            h, w = img.shape
+
+            scale = min(target_w / w, target_h / h)
+            new_w = int(w * scale)
+            new_h = int(h * scale)
+
+            resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
+            # CENTER ON WHITE 64×64 CANVAS
+            canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
+
+            y_offset = (target_h - new_h) // 2
+            x_offset = (target_w - new_w) // 2
+
+            canvas[y_offset:y_offset+new_h, x_offset:x_offset+new_w] = resized
+
+            # Add channel dimension → (1, 64, 64)
+            tensor = np.expand_dims(canvas, axis=0)
+
+            # Save
+            np.save(out_path, tensor)
             print(f"Saved: {out_name}")
 
             image_counter += 1
@@ -138,7 +233,8 @@ def gen_pixel_labels_nested(input_dir: str, output_file: str, overwrite_prev_fil
     np.save(output_file, labels)
     print(f"Saved {len(labels)} labels to {output_file}")
 
-# functions used for both datasets ----------------------------------------------------------------------------
+
+# functions used for both datasets (combining both datasets, not currently using) -------------------------------------
 def get_pixels_and_labels(feature_dir:str, label_file:str) -> tuple[np.ndarray, np.ndarray] :
     """Loads pixel features and labels from specified directory and file."""
     feature_list = []
@@ -202,8 +298,9 @@ def gen_pixel_labels_combined(input_dir: str, output_file: str, csv_file: str = 
 # Exectuion Calls and Testing ------------------------------------------------------------------------------------
 
 # gen_pixel_features(DATA, FEATURE_DIR, True)
-# gen_pixel_features_nested("/u50/chandd9/al3/ocr-repo-files-2", "/u50/chandd9/al3/ocr-pixel-nested", True)
-# gen_pixel_labels_nested("/u50/chandd9/al3/ocr-pixel-nested/", os.path.join("/u50/chandd9/al3/ocr-pixel-nested", "ordered_labels.npy"), True)
+# gen_pixel_features_nested("/u50/chandd9/al3/ocr-repo-files-2", "/u50/chandd9/al3/ocr-pixel-nested-V2", True)
+# gen_pixel_features_nested_fixed("/u50/chandd9/al3/ocr-repo-files-2", "/u50/chandd9/al3/ocr-pixel-nested-V2-fixed", True)
+# gen_pixel_labels_nested("/u50/chandd9/al3/ocr-pixel-nested-V2-fixed/", os.path.join("/u50/chandd9/al3/ocr-pixel-nested-V2-fixed", "ordered_labels.npy"), True)
 # npy_path = os.path.join(DATA, "english.csv")
 # df = pd.read_csv(f"{DIR}/ocr-repo-files/english.csv", sep=",")
 # dic = {}
@@ -218,14 +315,87 @@ def gen_pixel_labels_combined(input_dir: str, output_file: str, csv_file: str = 
 # gen_pixel_labels_combined("/u50/chandd9/al3/ocr-pixel-combined", "/u50/chandd9/al3/ocr-pixel-combined/ordered_labels.npy", f"{DIR}/ocr-repo-files/english.csv", True)
 
 
-print("labels in combined directory:")
-labels = np.load("/u50/chandd9/al3/ocr-pixel-combined/ordered_labels.npy")
-# print(labels)
-print(f"Total labels: {len(labels)}")
-print(f"Unique labels: {set(labels)}")
-print(f"Unique labels: {len(set(labels))}")
-print(f"labels count:")
-from collections import Counter
-label_counts = Counter(labels)
-for label, count in label_counts.items():
-    print(f"Label: {label}, Count: {count}")
+# print("labels in combined directory:")
+# labels = np.load("/u50/chandd9/al3/ocr-pixel-combined/ordered_labels.npy")
+# # print(labels)
+# print(f"Total labels: {len(labels)}")
+# print(f"Unique labels: {set(labels)}")
+# print(f"Unique labels: {len(set(labels))}")
+# print(f"labels count:")
+# from collections import Counter
+# label_counts = Counter(labels)
+# for label, count in label_counts.items():
+#     print(f"Label: {label}, Count: {count}")
+
+# helper functions 
+def visualize_npy_image(npy_path, output_path=None, scale_to_255=True):
+    """
+    Visualize a single preprocessed image stored as a .npy file.
+
+    Args:
+        npy_path (str): Path to the .npy file (shape should be (1, H, W) or (H, W))
+        output_path (str, optional): Path to save the image as PNG. If None, displays the image.
+        scale_to_255 (bool): If True, converts values [0,1] → [0,255] uint8.
+
+    Returns:
+        img (np.ndarray): The image array (H, W) uint8
+    """
+    # Load .npy
+    data = np.load(npy_path)
+
+    # Remove channel dim if exists
+    if data.ndim == 3 and data.shape[0] == 1:
+        img = data[0]
+    else:
+        img = data
+
+    # Scale to 0-255
+    if scale_to_255:
+        img = (img * 255).clip(0, 255).astype(np.uint8)
+
+    if output_path:
+        cv2.imwrite(output_path, img)
+        print(f"Saved visual image to: {output_path}")
+    else:
+        # Display using OpenCV
+        cv2.imshow("Image", img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+    return img
+
+def crop_to_text(img: np.ndarray):
+    """
+    Crops a grayscale image so that only the black text remains
+    (removes all surrounding white padding).
+
+    Args:
+        img : np.ndarray
+            Grayscale image (0=black, 255=white)
+
+    Returns:
+        Cropped grayscale image (np.ndarray)
+    """
+
+    # Ensure image is grayscale uint8
+    if img.dtype != np.uint8:
+        img = (img * 255).clip(0, 255).astype(np.uint8)
+
+    # Create a mask of non-white pixels
+    # threshold < 255 ensures any slightly dark pixel is counted
+    mask = img < 250       # adjustable if you want more/less strict
+
+    if not np.any(mask):
+        # No text found (empty image)
+        return img
+
+    coords = np.column_stack(np.where(mask))
+
+    y_min, x_min = coords.min(axis=0)
+    y_max, x_max = coords.max(axis=0)
+
+    cropped = img[y_min:y_max + 1, x_min:x_max + 1]
+
+    return cropped
+
+# a = visualize_npy_image("/u50/chandd9/al3/ocr-pixel-nested-V2-fixed/A_U_23.npy", "preview_npy_image.png")
