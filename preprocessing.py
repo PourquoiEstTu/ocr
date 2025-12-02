@@ -127,14 +127,9 @@ def segment_word(img_path: str) :
        image."""
     og_img = cv2.imread(img_path)
     img = cv2.cvtColor(og_img,cv2.COLOR_BGR2GRAY)
-    # img = cv2.GaussianBlur(img,(3, 3), 0)
     img = cv2.medianBlur(img, 3)
     _, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-    # kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
-    # img = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
-    # thresh_color = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
     img = cv2.dilate(img, (0.5,0.5), iterations=20)
-    # img = cv2.erode(img, (3, 15), iterations=15)
 
     contours,hierarchy = cv2.findContours(img,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
     contours = list(contours)
@@ -142,7 +137,6 @@ def segment_word(img_path: str) :
         return l[0][0][0]
     contours.sort(key=sorting_criteria)
     characters = []
-    # print(contours)
     for cnt in contours:
         x,y,w,h = cv2.boundingRect(cnt)
         characters.append(og_img[y:y+h, x:x+w])
