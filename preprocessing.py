@@ -174,20 +174,11 @@ def potential_segmentation_columns(img_path: str) :
     og_img = cv2.imread(img_path)
     img = cv2.cvtColor(og_img,cv2.COLOR_BGR2GRAY)
     h,w = img.shape
-    print(f"height = {h}, width = {w}")
     seg_cols = np.zeros(w) # entry i is 1 if i is a potential segmentation column (pcs)
-    # magic number to decide whether a column has enough black pixels to be 
+    # magic number to decide whether a column doesn't have enough white pixels to be 
     #   a pcs
-    seg_threshold = 0.023*h # usually is around < 1 
-    # print(h,w)
-    # return
-    # img = cv2.GaussianBlur(img, (3,3),0)
-    # img = cv2.bilateralFilter(img, 15, 41, 21)
-    # img = cv2.medianBlur(img, 1) # little too strong on some images
+    seg_threshold = 0.023*h # usually is < 1 
     _, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-    # print(img[15,10])
-    # thresh_color = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
-    # img = cv2.erode(img, (3, 3), iterations=2)
     img = cv2.ximgproc.thinning(img, cv2.ximgproc.THINNING_ZHANGSUEN)
     for i in range(w) :
         sum = 0
@@ -197,7 +188,6 @@ def potential_segmentation_columns(img_path: str) :
         if sum < seg_threshold :
             seg_cols[i] = 1
             # cv2.line(og_img, (i,0), (i,h-1), (0,0,255),2)
-    print(seg_cols)
     # remove pcs at beginning of image
     for i in range(w) :
         if seg_cols[i] == 1 :
@@ -211,30 +201,54 @@ def potential_segmentation_columns(img_path: str) :
         else :
             break
     # average out block of columns into one columns
+    # i should figure out why vals are double added to this some time, but jank
+    #   set solution for now
+    seg_col_locations = set() # width where pcs is located
+    seg_col_locations.add(0)
     for i in range(w) :
         if seg_cols[i] == 1 :
             num_of_consecutive_cols = 1
-            for j in range(i,w) :
-                if seg_cols[i] == 1 :
-                    # finish tmr
-    # print(seg_cols)
-    # cv2.waitKey(0)
-    while 1 :
-        cv2.imshow('', og_img)
-        k = cv2.waitKey(100000)
-        if k==27:    # Esc key to stop
-            break
-        elif k==-1:  # normally -1 returned,so don't print it
-            continue
+            for j in range(i+1,w) :
+                if seg_cols[j] == 1 :
+                    num_of_consecutive_cols += 1
+                else :
+                    break
+            true_seg_col = i + num_of_consecutive_cols // 2
+            seg_col_locations.add(true_seg_col)
+            # cv2.line(og_img, (true_seg_col,0), (true_seg_col,h-1), (0,0,255),1)
+            for j in range(i, i + num_of_consecutive_cols) :
+                if j != true_seg_col :
+                    seg_cols[j] = 0
+            i += num_of_consecutive_cols # shouldn't ever be out of bounds b/c columns at edge of image have alr been removed
+    seg_col_locations.add(w) # add end of image dimensions
+    seg_col_locations = sorted(list(seg_col_locations)) # time complexity :(
+    characters = [] # characters from the image
+    for i in range(0, len(seg_col_locations)-1) : 
+        char = og_img[0:h, seg_col_locations[i]:seg_col_locations[i+1]]
+        characters.append(char)
+    # visualization for each individual character
+    # for char in characters :
+        # print(char.shape)
+        # cv2.imshow('', char)
+        # k = cv2.waitKey(100000)
+    # visualization for whole image
+    # while 1 :
+    #     cv2.imshow('', og_img)
+    #     k = cv2.waitKey(100000)
+    #     if k==27:    # Esc key to stop
+    #         break
+    #     elif k==-1:  # normally -1 returned,so don't print it
+    #         continue
+    return characters
 # potential_segmentation_columns(f"{MNIST_DATA}/4.png")
 # potential_segmentation_columns(f"{MNIST_DATA}/14.png")
 # potential_segmentation_columns(f"{MNIST_DATA}/39.jpeg")
 # potential_segmentation_columns(f"{MNIST_DATA}/28.png")
 # potential_segmentation_columns(f"{MNIST_DATA}/27.png")
 # potential_segmentation_columns(f"{MNIST_DATA}/31.png")
-potential_segmentation_columns(f"{MNIST_DATA}/26.jpeg")
+# potential_segmentation_columns(f"{MNIST_DATA}/26.jpeg")
 # potential_segmentation_columns(f"{MNIST_DATA}/50.jpeg")
 # potential_segmentation_columns(f"{MNIST_DATA}/53.png")
-#potential_segmentation_columns(f"{MNIST_DATA}/61.png")
-#potential_segmentation_columns(f"{MNIST_DATA}/63.jpeg") 
-#potential_segmentation_columns(f"{MNIST_DATA}/65.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/61.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/63.jpeg") 
+# potential_segmentation_columns(f"{MNIST_DATA}/65.png")
