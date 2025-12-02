@@ -12,6 +12,10 @@ DIR = "/windows/Users/thats/Documents/ocr-repo-files"
 DATA = "dataset2/Img"  # set directory path
 FEATURE_DIR = f"{DIR}/features"
 
+MNIST_DIR = f"{DIR}/mnist"
+MNIST_DATA = f"{DIR}/mnist/dataset/v011_words_small"
+MNIST_JSON = f"{DIR}/mnist/v011_labels_small.json"
+
 os.makedirs(FEATURE_DIR, exist_ok=True)
 
 
@@ -45,10 +49,10 @@ gammaCorrection = 1
 nlevels = 64
 useSignedGradients = False
 
-hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
-    cellSize,nbins,derivAperture,
-    winSigma,histogramNormType,L2HysThreshold,
-    gammaCorrection,nlevels, useSignedGradients)
+# hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
+#     cellSize,nbins,derivAperture,
+#     winSigma,histogramNormType,L2HysThreshold,
+#     gammaCorrection,nlevels, useSignedGradients)
 
 def gen_hog_features(input_dir:str, output_dir:str,
                         overwrite_prev_files: bool=False) -> None :
@@ -116,3 +120,129 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[1]) )
+
+def segment_word(img_path: str) :
+    """Takes a path to an image with a single word in it and outputs 
+       a group of images with each character in the word on a simple
+       image."""
+    og_img = cv2.imread(img_path)
+    img = cv2.cvtColor(og_img,cv2.COLOR_BGR2GRAY)
+    img = cv2.medianBlur(img, 3)
+    _, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+    img = cv2.dilate(img, (0.5,0.5), iterations=20)
+
+    contours,hierarchy = cv2.findContours(img,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+    contours = list(contours)
+    def sorting_criteria(l) : # sort contours by first coordinate stored
+        return l[0][0][0]
+    contours.sort(key=sorting_criteria)
+    characters = []
+    for cnt in contours:
+        x,y,w,h = cv2.boundingRect(cnt)
+        characters.append(og_img[y:y+h, x:x+w])
+        # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2) # visualization
+        # cv2.rectangle(og_img,(x,y),(x+w,y+h),(0,255,0),1)
+    # cv2.imshow('', img)
+    # cv2.imshow('', og_img)
+    # cv2.imshow('', thresh_color)
+    # for c in characters :
+    #     cv2.imshow('', c)
+    #     cv2.waitKey(0)
+    # cv2.waitKey(0)
+    return characters
+# segment_word(f"{MNIST_DATA}/4.png")
+# segment_word(f"{MNIST_DATA}/28.png")
+# segment_word(f"{MNIST_DATA}/27.png")
+# segment_word(f"{MNIST_DATA}/31.png")
+# segment_word(f"{MNIST_DATA}/26.jpeg")
+# segment_word(f"{MNIST_DATA}/50.jpeg") # does not work very good on this
+# segment_word(f"{MNIST_DATA}/53.png")
+# segment_word(f"{MNIST_DATA}/61.png")
+# segment_word(f"{MNIST_DATA}/63.jpeg") # appears to not work too well on u's and y's?
+# segment_word(f"{MNIST_DATA}/65.png")
+
+# implements character segmentation in the 'A New Character Segmentation Approach 
+#   for Off-Line Cursive Handwritten Words' paper at 
+#   https://www.researchgate.net/publication/257719290_A_New_Character_Segmentation_Approach_for_Off-Line_Cursive_Handwritten_Words"""
+def potential_segmentation_columns(img_path: str) :
+    og_img = cv2.imread(img_path)
+    img = cv2.cvtColor(og_img,cv2.COLOR_BGR2GRAY)
+    h,w = img.shape
+    seg_cols = np.zeros(w) # entry i is 1 if i is a potential segmentation column (pcs)
+    # magic number to decide whether a column doesn't have enough white pixels to be 
+    #   a pcs
+    seg_threshold = 0.023*h # usually is < 1 
+    _, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+    img = cv2.ximgproc.thinning(img, cv2.ximgproc.THINNING_ZHANGSUEN)
+    for i in range(w) :
+        sum = 0
+        for j in range(h) :
+            sum += img[j,i] // 255 # make sure white pixels have value 1
+            # cv2.rectangle(drawing,(i,j),(i+10,j+10),(100,100,0),1) # visualization
+        if sum < seg_threshold :
+            seg_cols[i] = 1
+            # cv2.line(og_img, (i,0), (i,h-1), (0,0,255),2)
+    # remove pcs at beginning of image
+    for i in range(w) :
+        if seg_cols[i] == 1 :
+            seg_cols[i] = 0
+        else :
+            break
+    # remove pcs at end of image
+    for i in range(w-1, -1, -1) :
+        if seg_cols[i] == 1 :
+            seg_cols[i] = 0
+        else :
+            break
+    # average out block of columns into one columns
+    # i should figure out why vals are double added to this some time, but jank
+    #   set solution for now
+    seg_col_locations = set() # width where pcs is located
+    seg_col_locations.add(0)
+    for i in range(w) :
+        if seg_cols[i] == 1 :
+            num_of_consecutive_cols = 1
+            for j in range(i+1,w) :
+                if seg_cols[j] == 1 :
+                    num_of_consecutive_cols += 1
+                else :
+                    break
+            true_seg_col = i + num_of_consecutive_cols // 2
+            seg_col_locations.add(true_seg_col)
+            # cv2.line(og_img, (true_seg_col,0), (true_seg_col,h-1), (0,0,255),1)
+            for j in range(i, i + num_of_consecutive_cols) :
+                if j != true_seg_col :
+                    seg_cols[j] = 0
+            i += num_of_consecutive_cols # shouldn't ever be out of bounds b/c columns at edge of image have alr been removed
+    seg_col_locations.add(w) # add end of image dimensions
+    seg_col_locations = sorted(list(seg_col_locations)) # time complexity :(
+    characters = [] # characters from the image
+    for i in range(0, len(seg_col_locations)-1) : 
+        char = og_img[0:h, seg_col_locations[i]:seg_col_locations[i+1]]
+        characters.append(char)
+    # visualization for each individual character
+    # for char in characters :
+        # print(char.shape)
+        # cv2.imshow('', char)
+        # k = cv2.waitKey(100000)
+    # visualization for whole image
+    # while 1 :
+    #     cv2.imshow('', og_img)
+    #     k = cv2.waitKey(100000)
+    #     if k==27:    # Esc key to stop
+    #         break
+    #     elif k==-1:  # normally -1 returned,so don't print it
+    #         continue
+    return characters
+# potential_segmentation_columns(f"{MNIST_DATA}/4.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/14.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/39.jpeg")
+# potential_segmentation_columns(f"{MNIST_DATA}/28.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/27.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/31.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/26.jpeg")
+# potential_segmentation_columns(f"{MNIST_DATA}/50.jpeg")
+# potential_segmentation_columns(f"{MNIST_DATA}/53.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/61.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/63.jpeg") 
+# potential_segmentation_columns(f"{MNIST_DATA}/65.png")
