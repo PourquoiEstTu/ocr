@@ -8,39 +8,105 @@ import sys
 import cv2
 import pandas as pd
 import numpy as np
+import torch
 
 DIR = r"/u50/chandd9/al3/"
 FEATURE_DIR = f"{DIR}/ocr-pixel"
 DATA = f"{DIR}/ocr-repo-files/Img"  # set directory path
 
-# Helper Function
+# Old Helper Function
+# def preprocess_image(image_path, img_size=(64, 64)):
+#     # ---- Load grayscale ----
+#     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+#     if img is None:
+#         raise ValueError(f"Could not read image: {image_path}")
+
+#     # Ensure uint8
+#     if img.dtype != np.uint8:
+#         img = (img * 255).clip(0, 255).astype(np.uint8)
+
+#     # median blur to reduce noise
+#     img = cv2.medianBlur(img, 3)
+
+#     # ---- OTSU Thresholding to detect foreground ----
+#     # OTSU returns: ret (threshold_value), binary_image
+#     _, otsu_mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+#     # Convert mask to boolean (True = foreground)
+#     mask = otsu_mask > 0
+
+#     # Crop to bounding box
+#     if np.any(mask):
+#         coords = np.column_stack(np.where(mask))
+#         y_min, x_min = coords.min(axis=0)
+#         y_max, x_max = coords.max(axis=0)
+#         img = img[y_min:y_max + 1, x_min:x_max + 1]
+
+#     # Normalize to [0,1] 
+#     img = img.astype(np.float32) / 255.0
+
+#     # ---- Resize with aspect ratio preserved ----
+#     target_h, target_w = img_size
+#     h, w = img.shape
+
+#     scale = min(target_w / w, target_h / h)
+#     new_w = int(w * scale)
+#     new_h = int(h * scale)
+
+#     resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
+#     # ---- Center on white canvas ----
+#     canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
+
+#     y_offset = (target_h - new_h) // 2
+#     x_offset = (target_w - new_w) // 2
+
+#     canvas[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = resized
+
+#     # ---- Convert to tensor (1,1,64,64) ----
+#     # tensor = torch.tensor(canvas).unsqueeze(0).unsqueeze(0)
+
+#     # # ---- Debug preview ----
+#     # preview = (canvas * 255).astype(np.uint8)
+#     # cv2.imwrite("preview_processed_image.png", preview)
+
+#     # print("Saved preview to preview_processed_image.png")
+#     # print("Processed tensor shape:", tensor.shape)
+
+#     return canvas
+
+
 def preprocess_image(image_path, img_size=(64, 64)):
     # ---- Load grayscale ----
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise ValueError(f"Could not read image: {image_path}")
 
-    # Convert to uint8 if not
+    # Ensure uint8
     if img.dtype != np.uint8:
         img = (img * 255).clip(0, 255).astype(np.uint8)
 
-    # Crop image to just non-white pixels
-    mask = img < 200  # treat pixels < 200 as non-white
+    # median blur to reduce noise
+    img = cv2.medianBlur(img, 3)
 
-    # Crop to bounding box of non-white pixels
+    # ---- OTSU Thresholding to detect foreground ----
+    # OTSU returns: ret (threshold_value), binary_image
+    _, otsu_mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    # Convert mask to boolean (True = foreground)
+    mask = otsu_mask > 0
+
+    # Crop to bounding box
     if np.any(mask):
         coords = np.column_stack(np.where(mask))
         y_min, x_min = coords.min(axis=0)
         y_max, x_max = coords.max(axis=0)
         img = img[y_min:y_max + 1, x_min:x_max + 1]
 
-    # Convert to float [0,1]
+    # Normalize to [0,1] 
     img = img.astype(np.float32) / 255.0
 
-    # write cropped preview image
-    # cv2.imwrite("preview_cropped_image.png", (img * 255).clip(0,255).astype(np.uint8))
-
-    # ---- Resize while preserving aspect ratio ----
+    # ---- Resize with aspect ratio preserved ----
     target_h, target_w = img_size
     h, w = img.shape
 
@@ -50,7 +116,7 @@ def preprocess_image(image_path, img_size=(64, 64)):
 
     resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
 
-    # ---- Center on white 64x64 canvas ----
+    # ---- Center on white canvas ----
     canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
 
     y_offset = (target_h - new_h) // 2
@@ -58,22 +124,17 @@ def preprocess_image(image_path, img_size=(64, 64)):
 
     canvas[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = resized
 
-    # Add channel + batch dims → (1,1,64,64)
-    tensor = torch.tensor(canvas).unsqueeze(0).unsqueeze(0)
+    # ---- Convert to tensor (1,1,64,64) ----
+    # tensor = torch.tensor(canvas).unsqueeze(0).unsqueeze(0)
 
-    # DEBUGING LINES: Save preview image
-    preview = tensor.squeeze().cpu().numpy()
-    preview_uint8 = (preview * 255).clip(0, 255).astype(np.uint8)
+    # # ---- Debug preview ----
+    # preview = (canvas * 255).astype(np.uint8)
+    # cv2.imwrite("preview_processed_image.png", preview)
 
-    output_path = "preview_processed_image.png"
-    if not cv2.imwrite(output_path, preview_uint8):
-        raise ValueError("Could not write preview image.")
+    # print("Saved preview to preview_processed_image.png")
+    # print("Processed tensor shape:", tensor.shape)
 
-    print(f"Saved preview image to: {output_path}")
-    print(f"Processed tensor shape: {tensor.shape}")
-
-    return tensor
-
+    return canvas
 
 # Functions used for dataset 1 (3410 images) (not in use anymore) -----------------------------------------------------------------------
 def gen_pixel_features(input_dir:str, output_dir:str, overwrite_prev_files: bool=False) -> None :
@@ -187,17 +248,17 @@ def old_gen_pixel_features_nested(input_dir: str, output_dir: str, overwrite_pre
 
             image_counter += 1
 
-def gen_pixel_features_nested_fixed(input_dir: str, output_dir: str, overwrite_prev_files: bool = False) -> None:
+def gen_pixel_features_nested_otsu(input_dir: str, output_dir: str, overwrite_prev_files: bool = False) -> None:
     """
-    Loads images, crops text using brightness threshold, resizes while preserving
-    aspect ratio, centers on 64x64 white background, and saves as .npy.
+    Uses the global preprocess_image() to convert images to the
+    normalized (1,1,64,64) tensor, then saves them as .npy files.
     """
     os.makedirs(output_dir, exist_ok=True)
 
     for folder in os.scandir(input_dir):
         if not folder.is_dir():
             continue
-        
+
         class_name = folder.name
         print(f"Processing class folder: {class_name}")
         image_counter = 1
@@ -209,60 +270,107 @@ def gen_pixel_features_nested_fixed(input_dir: str, output_dir: str, overwrite_p
             out_name = f"{class_name}_{image_counter}.npy"
             out_path = os.path.join(output_dir, out_name)
 
+            # Skip if exists
             if not overwrite_prev_files and os.path.exists(out_path):
                 image_counter += 1
                 continue
 
-            # Load grayscale
+            # Load grayscale as numpy array
             img = cv2.imread(file.path, cv2.IMREAD_GRAYSCALE)
             if img is None:
                 print(f"Skipping unreadable file: {file.path}")
                 continue
 
-            # Convert to uint8 if needed
-            if img.dtype != np.uint8:
-                img = img.astype(np.uint8)
+            # Call preprocess_image
+            try:
+                arr = preprocess_image(file.path)   # returns shape (1,1,64,64)
+            except Exception as e:
+                print(f"Error processing {file.path}: {e}")
+                continue
 
-            # CROP IMAGE
-            # Mask of all pixels that are NOT near-white
-            mask = img < 200  # treat pixels < 200 as non-white
-
-            if np.any(mask):
-                coords = np.column_stack(np.where(mask))
-                y_min, x_min = coords.min(axis=0)
-                y_max, x_max = coords.max(axis=0)
-                img = img[y_min:y_max+1, x_min:x_max+1]
-            # else: full white image → leave as-is
-
-            # Convert to float32 [0,1] AFTER cropping
-            img = img.astype(np.float32) / 255.0
-
-            # RESIZE WITH ASPECT RATIO PRESERVATION
-            target_h, target_w = 64, 64
-            h, w = img.shape
-
-            scale = min(target_w / w, target_h / h)
-            new_w = int(w * scale)
-            new_h = int(h * scale)
-
-            resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
-
-            # CENTER ON WHITE 64×64 CANVAS
-            canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
-
-            y_offset = (target_h - new_h) // 2
-            x_offset = (target_w - new_w) // 2
-
-            canvas[y_offset:y_offset+new_h, x_offset:x_offset+new_w] = resized
-
-            # Add channel dimension → (1, 64, 64)
-            tensor = np.expand_dims(canvas, axis=0)
-
-            # Save
-            np.save(out_path, tensor)
+            # Save .npy
+            np.save(out_path, arr)
             print(f"Saved: {out_name}")
 
             image_counter += 1
+
+
+# def gen_pixel_features_nested_fixed(input_dir: str, output_dir: str, overwrite_prev_files: bool = False) -> None:
+#     """
+#     Loads images, crops text using brightness threshold, resizes while preserving
+#     aspect ratio, centers on 64x64 white background, and saves as .npy.
+#     """
+#     os.makedirs(output_dir, exist_ok=True)
+
+#     for folder in os.scandir(input_dir):
+#         if not folder.is_dir():
+#             continue
+        
+#         class_name = folder.name
+#         print(f"Processing class folder: {class_name}")
+#         image_counter = 1
+
+#         for file in os.scandir(folder.path):
+#             if not file.is_file():
+#                 continue
+
+#             out_name = f"{class_name}_{image_counter}.npy"
+#             out_path = os.path.join(output_dir, out_name)
+
+#             if not overwrite_prev_files and os.path.exists(out_path):
+#                 image_counter += 1
+#                 continue
+
+#             # Load grayscale
+#             img = cv2.imread(file.path, cv2.IMREAD_GRAYSCALE)
+#             if img is None:
+#                 print(f"Skipping unreadable file: {file.path}")
+#                 continue
+
+#             # Convert to uint8 if needed
+#             if img.dtype != np.uint8:
+#                 img = img.astype(np.uint8)
+
+#             # CROP IMAGE
+#             # Mask of all pixels that are NOT near-white
+#             mask = img < 200  # treat pixels < 200 as non-white
+
+#             if np.any(mask):
+#                 coords = np.column_stack(np.where(mask))
+#                 y_min, x_min = coords.min(axis=0)
+#                 y_max, x_max = coords.max(axis=0)
+#                 img = img[y_min:y_max+1, x_min:x_max+1]
+#             # else: full white image → leave as-is
+
+#             # Convert to float32 [0,1] AFTER cropping
+#             img = img.astype(np.float32) / 255.0
+
+#             # RESIZE WITH ASPECT RATIO PRESERVATION
+#             target_h, target_w = 64, 64
+#             h, w = img.shape
+
+#             scale = min(target_w / w, target_h / h)
+#             new_w = int(w * scale)
+#             new_h = int(h * scale)
+
+#             resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
+#             # CENTER ON WHITE 64×64 CANVAS
+#             canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
+
+#             y_offset = (target_h - new_h) // 2
+#             x_offset = (target_w - new_w) // 2
+
+#             canvas[y_offset:y_offset+new_h, x_offset:x_offset+new_w] = resized
+
+#             # Add channel dimension → (1, 64, 64)
+#             tensor = np.expand_dims(canvas, axis=0)
+
+#             # Save
+#             np.save(out_path, tensor)
+#             print(f"Saved: {out_name}")
+
+#             image_counter += 1
 
 def gen_pixel_labels_nested(input_dir: str, output_file: str, overwrite_prev_file=False) -> None:
     """
@@ -371,6 +479,9 @@ def gen_pixel_labels_combined(input_dir: str, output_file: str, csv_file: str = 
 #     dic[x] = df["label"][i]
 #     i += 1
 # # print(dic)
+
+# gen_pixel_features_nested_otsu("/u50/chandd9/al3/ocr-repo-files-2", "/u50/chandd9/al3/ocr-pixel-nested-V2-otsu", True)
+# gen_pixel_labels_nested("/u50/chandd9/al3/ocr-pixel-nested-V2-otsu/", os.path.join("/u50/chandd9/al3/ocr-pixel-nested-V2-otsu", "ordered_labels.npy"), True)
 
 # gen_pixel_labels(DATA, os.path.join(FEATURE_DIR, "ordered_labels.npy"), True)
 # get_pixels_and_labels(FEATURE_DIR, os.path.join(FEATURE_DIR, "ordered_labels.npy"))

@@ -20,7 +20,7 @@ import preprocessing_cnn as pre
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 DIR = r"/u50/chandd9/al3/ocr/cnn_files/outputs"
-FEATURE_DIR = f"/u50/chandd9/al3/ocr-pixel-nested-V2-fixed"
+FEATURE_DIR = f"/u50/chandd9/al3/ocr-pixel-nested-V2-otsu"
 
 os.makedirs(DIR, exist_ok=True)
 
