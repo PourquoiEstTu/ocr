@@ -19,9 +19,10 @@ import joblib
 import preprocessing_cnn as pre
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DIR = r"/u50/chandd9/al3/"
+DIR = r"/u50/chandd9/al3/ocr/cnn_files/outputs"
 FEATURE_DIR = f"/u50/chandd9/al3/ocr-pixel-nested-V2-fixed"
 
+os.makedirs(DIR, exist_ok=True)
 
 dimension = 64  # resized to 64x64 pixels
 
