@@ -104,6 +104,26 @@ in a photo of a stop sign).
 \begin{itemize} 
 \item from the sheet. check the data set from. refer to the new data set.
 \end{itemize}
+\hspace{\parindent}We chiefly used two datasets: 
+\href{https://www.kaggle.com/datasets/harieh/ocr-dataset}{OCR-Dataset} and 
+\href{https://www.kaggle.com/datasets/harieh/ocr-dataset}{Words MNIST}. 
+
+OCR-Dataset consists of the 26 letters of the English alphabet in  
+both lower and uppercase along with all 10 digits; across the 62 classes, there 
+are roughly 210 000 images in total. The data uses 3475 different fonts from 
+publicly available Google Fonts. It is the dataset we trained 
+our model on. There are a number of preprocessing steps done to the images 
+from this dataset. Images are converted to a specific type (\texttt{np.uint8})
+to ensure consistency in the following preprocessing steps. Then, 
+all white pixels on the edge of the letter are cropped out (the cropping is 
+similar to a bounding box being placed around the letter/digit and then all 
+pixels outside of it removed from the image). The image is then scaled to 
+have dimensions of 64x64, and finally, it is turned into a tensor. After this 
+preprocessing, the images from this dataset can be inputted to the model. This 
+preprocessing here assumes the image contains a single character; however, for 
+images with more than one character, extra preprocessing was needed.
+
+The Words MNIST dataset 
 
 
 \section{Features and Inputs}
