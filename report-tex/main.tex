@@ -154,17 +154,17 @@ in ``a'' would be returned as distinct characters. With the variation in font,
 this occurred quite often with ``o''s and ``a''s. 
 
 The second, more successful segmentation function implements the Potential 
-Segmentation Columns (PCS) method from the paper:
+Segmentation Columns (PSC) method from the paper:
 \href{https://www.researchgate.net/publication/257719290_A_New_Character_Segmentation_Approach_for_Off-Line_Cursive_Handwritten_Words}
 {A New Character Segmentation Approach for Off-Line Cursive Handwritten Words}.
 The same rough process is done as before with the exception of blurring
 before thresholding and instead of dilating the image, we use Zhang 
 Suen's method to thin the characters. After thinning, all columns of pixels 
 in the images are scanned. If there is less than or exactly 1 pixel (this was 
-generally the PCS threshold/limit for the images in the Words MNIST dataset)
+generally the PSC threshold/limit for the images in the Words MNIST dataset)
 of white (meaning less than 1 pixel of character), then the column is marked 
-as being a PCS. After the image is fully scanned, the array of marked 
-segmentation columns is looped through. For each set of consecutive PCSs, 
+as being a PSC. After the image is fully scanned, the array of marked 
+segmentation columns is looped through. For each set of consecutive PSCs, 
 the middle column of the set is chosen as the segmentation column and the 
 rest are unmarked. Finally, the original image is cropped according to these 
 columns and the individual images are returned. This method worked much better
@@ -237,8 +237,8 @@ will also use this model's results as another baseline for our final model.
 
 \subsection*{Final Model}
 
-Our final model implementation was using PyTorch based on a multi-layer 
-CNN architecture. 
+\hspace{\parindent}Our final model implementation was using PyTorch based on a 
+multi-layer CNN architecture. 
 It operates on grayscale image input and uses mini-batch gradient descent for 
 optimization with a cross-entropy loss function. We decided on this architecture 
 because convolutional layers are very effective at extracting 
@@ -259,7 +259,12 @@ dataset was randomized before being split. A batch size of
 learning rate and weight decay of 1e-3 for the SGD optimizer. Similar to the 
 previous model, early stopping is implemented to stop learning when validation 
 accuracy stops improving. Using this model, we achieve a test accuracy of 
-90\%. It clearly performs much better than the previous model. 
+91\% on characters. It clearly performs much better than the previous model. 
+We also tested it on the Words MNIST dataset using the PSC algorithm for 
+breaking the images of words into an array of images with characters. The 
+accuracy of this when tested against the whole dataset was 53.72\%. When 
+loosening the accuracy measure to treat words with one character being classified 
+wrong as correct, the accuracy is 78.30\%.
 
 Once again, we compare this model to some baselines. It is clearly better 
 than our previous model and the random baseline. We will also compare it 
