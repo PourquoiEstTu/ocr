@@ -329,11 +329,30 @@ We visualized our metrics more to be able to understand and compare the models w
 We slightly diverged from the plan of using a pretrained models or a existing library, instead we 
 implemented a known method for segmenting text obtianed from online research into own code. 
 \section{Error Analysis}
+\subsection*{Results and Analysis}
+Looking the confusion matrix generated for validation set of HOG model, seen in (link). (link) shows both the classes 
+which are most misclassified and correctly classified. Looking the graph we can see that the classes '0'/'O', '1'/'I', 
+and 'n'/'r'  are often misclassified as each other, which makes sense as they share very similar shapes, and therefore 
+will have very similar HOG features. 
 
-% \section{chat}
-\begin{itemize} 
-\item Need to figure out
-\end{itemize}
+The confusion matrix generated for the CNN model can be seen (link). (link) shows a similar pattern as the HOG model, 
+but is ran with a significantly larger dataset therefore results seem quite different. Looking at the graph, 
+we can continue to see the pattern of classes '0'/'O' being incorrectly classified, once again due to their 
+similar shapes. We can also see new errors such as 'c'/'C', 'l'/'I', or ''/''.
+
+However, a clear difference found is that the CNN model performs much better at classifying 'n'/'r' and '1'/'I' 
+as there are almost no mix up between the two. This could either be a reason from having a better dataset (typed 
+letters have more clear distinct features), because of the CNN architecture, or both.
+
+\subsection*{Potential Solutions}
+To address the issue of '0'/'O' and uppercase/lowercase misclassifications, one potential improvement is to 
+increase the resolution of the input images. Our current 64×64 inputs may be too low to capture the subtle 
+stroke differences between similar characters such as O vs 0 or C vs c. Increasing this to 96×96 or higher 
+could give the model more detailed visual information to learn from. Incorporating data augmentation during 
+training would also help the model generalize better by exposing it to variations in rotation, brightness, 
+and slight distortions. Additionally, reducing the amount of "downsampling", or compression in our CNN 
+architecture may help preserve important fine grained features, allowing the network to retain more shape 
+information needed to distinguish similar characters.
 
 % \section{Template Notes}
 
