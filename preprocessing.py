@@ -8,8 +8,12 @@ import numpy as np
 # np.set_printoptions(threshold=sys.maxsize)
 
 # any of these can be changed to reflect your own directories
-DIR = "/windows/Users/thats/Documents/ocr-repo-files"
-DATA = "dataset2/Img"  # set directory path
+# DIR = "/windows/Users/thats/Documents/ocr-repo-files"
+# DATA = "dataset2/Img"  # set directory path
+# FEATURE_DIR = f"{DIR}/features"
+# DIR = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files"
+# DATA = r"/Users/dhruv/OneDrive/Desktop/4AL3/ocr-repo-files/dataset2/Img"  # set directory path
+DIR = r"/u50/chandd9/al3/"
 FEATURE_DIR = f"{DIR}/features"
 
 MNIST_DIR = f"{DIR}/mnist"
@@ -56,6 +60,8 @@ useSignedGradients = False
 
 def gen_hog_features(input_dir:str, output_dir:str,
                         overwrite_prev_files: bool=False) -> None :
+    """Generates HOG features for all images in input_dir and saves them
+       as .npy files in output_dir."""
     for file in os.scandir(input_dir) :
         if file.is_file() :
             npy_path = os.path.join(output_dir, f"{file.name.strip('.png')}.npy")
@@ -96,15 +102,20 @@ def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
 def concatenate_features(feature_dir: str, nfiles: int=100) -> np.ndarray :
     """Takes a directory with npy files containing 1D arrays 
        and concatenates them into one array"""
+    # fix issue of unordered files by sorting them
+    files = sorted(
+        [f for f in os.listdir(feature_dir) if f.endswith(".npy") and f != "ordered_labels.npy"]
+    )
     X = []
     file_count = 0
-    for file in os.scandir(feature_dir) :
-        if ( file.name != "ordered_labels.npy" ) and ( file.is_file() ) :
-            X.append( np.load(f"{feature_dir}/{file.name}") )
+    for file in files:
+        # print(f"Processing file: {file}")
+        # if ( file.name != "ordered_labels.npy" ) and ( file.is_file() ) :
+        X.append( np.load(f"{feature_dir}/{file}") )
         file_count += 1
         if file_count >= nfiles :
             break
-    return np.array(X)
+    return np.array(X), files
 # concatenate_features(FEATURE_DIR,)
 
 # horrendous function name
@@ -113,9 +124,10 @@ def get_same_length_features_and_labels(label_file: str, feature_dir: str,
     """Specify some starting index and ending index to get the features
        from feature_dir in that range along with their corresponding
        labels"""
-    features = concatenate_features(feature_dir, end_idx)[start_idx:]
+    features, file_names = concatenate_features(feature_dir, end_idx)[start_idx:]
+    # print(np.load(label_file)[start_idx:end_idx])
     truncated_labels = np.load(label_file)[start_idx:end_idx]
-    return ( features, truncated_labels )
+    return ( features, truncated_labels, file_names)
 # print(len(get_same_length_features_and_labels(
 #     f"{FEATURE_DIR}/ordered_labels.npy", FEATURE_DIR, 100)[0]) )
 # print(len(get_same_length_features_and_labels(
