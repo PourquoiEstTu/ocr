@@ -253,13 +253,27 @@ The output of these layers are fed into two fully connected linear layers
 containing 256 hidden neurons and a final output
 layer corresponding to the number of classes within our dataset.
 
+Training was done with an 80/20 training-test split where the dataset was 
+randomized before being split. A batch size of 16 was used with a 0.03 
+learning rate and weight decay of 1e-3 for the SGD optimizer. Similar to the 
+previous model, early stopping is implemented to stop learning when validation 
+accuracy stops improving. Using this model, we achieve a test accuracy of 
+90\%. It clearly performs much better than the previous model. 
 
+Once again, we compare this model to some baselines. It is clearly better 
+than our previous model and the random baseline. We will also compare it 
+with other state of the art OCR models. The models we will compare against, 
+unlike our model, are much more complex 
+and takes whole PDF documents as input. We use a table sourced from 
+Mistral AI's research into developing their own OCR model. They compare 
+their model against others on a variety of benchmarks including how well 
+tables and math can be scanned, but we will use their benchmarks for recognizing
+words from different languages only. 
+\begin{center}
+  \includegraphics[scale=0.25]{mistral-benchmarks.png}
+\end{center}
 
 % Our initial model was implemented using Pytorch using a Convolutional Neural Network
-
-
-Our initial versions of the model used a neural network. Cross entropy loss 
-and the Stochastic Gradient Descent (SGD) optimizers were used. 
 
 \section{Evaluation and Progress}
 \begin{itemize} 
@@ -347,6 +361,8 @@ and the Stochastic Gradient Descent (SGD) optimizers were used.
 \nocite{DBLP:journals/corr/abs-1802-02611}
 
 \nocite{OCR-CRNN}
+
+\nocite{MISTRAL}
 
 % \subsection{Equations}
 
