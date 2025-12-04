@@ -204,6 +204,36 @@ cell size being increased can
 greatly decrease the size of each feature since less gradients are calculated.
 
 \section{Implementation}
+Our inital model Implementation was using PyTorch and is based on a feedforward neural network architecture. 
+It uses mini-batch gradient descent for optimization and uses cross-entropy loss for learning. We 
+landed on using a gradient descent optimizer with a cross-entropy loss function initially as it 
+allows for quick training of our model. We tested our model using an Adam optimizer instead, 
+but it did not improve results much, while slowing down the training significantly. This model consisted
+of 4 linear layers containing 896 total hidden neurons (512 on layer one, 256 for layer two, and 128 for layer three)
+interspersed with ReLU activation functions to prevent negative values.
+The network also contains dropout layers to prevent overfitting. 
+
+Another model implmentation that we used was a SVM? (yapapapa)
+
+Our final model implementation was using PyTorch based on a multi-layer Convolutional Neural Network architecture. 
+It operates on grayscale image input and uses mini-batch gradient descent for optimization with a cross-entropy loss
+function. We decided on this architecture because convolutional layers are very effective at extracting 
+spatial features and image recognition tasks, fitting into the project requirements nicely. The network consists
+of three convolutional blocks with 32, 64, and 128 filters. Each block contains the convolution layer, batch normalization 
+layer to help stablize training, a ReLU activation function to ensure non-negativity, max-pooling layer for
+spacial downsampling (idr understand this must elaborate)
+, and dropout layers to reduce overfitting.
+(describe this section moorrreeeee)
+The output of these layers are fed into two fully connected linear layers containing 256 hidden neurons and final output
+layer corresponding to the number of classes within our dataset.
+
+Training was conducted on a 80/20 training/testing split, 
+with a batch size of 64 over 500 epochs, with a early stopping patience 
+implements of 100 epochs which halts training if validation accuracy stop improving. 
+Through the training, our model logs the training loss, validation loss, and validation
+accuracy every 10 epochs to allow us to monitor model efficiency. Our current model provides 
+a 68\% validation accuracy. This is a not perfect score, but performs decently and can accurately 
+classifies characters most of the time.
 
 
 % Our initial model was implemented using Pytorch using a Convolutional Neural Network
