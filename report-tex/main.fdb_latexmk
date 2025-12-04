@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764874162.43645 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764874163.67828 0
-  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764874161.88135 16888 ff48702350a2c1d7141e883ee473e7d6 ""
+["pdflatex"] 1764876093.76488 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764876095.03873 0
+  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764876093.28942 17107 607c5c332e1efec92584cc2594a1e414 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1755987285 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1755987285 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -9,6 +9,7 @@
   "/usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr8c.tfm" 1755987285 1352 fa28a7e6d323c65ce7d13d5342ff6be2 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm" 1755987285 4408 25b74d011a4c66b7f212c0cc3c90061b ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm" 1755987285 6672 e3ab9e37e925f3045c9005e6d1473d56 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm" 1755987285 1528 abec98dbc43e172678c11b3b9031252a ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1755987285 1524 4414a8315f39513458b80dfc63bff03a ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1755987285 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm" 1755987285 1520 eccf95517727cb11801f4f1aee3a21b4 ""
@@ -23,6 +24,8 @@
   "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm" 1755987285 520 82a3d37183f34b6eb363a161dfc002c2 ""
   "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy6.tfm" 1755987285 520 4889cce2180234b97cad636b6039c722 ""
   "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy8.tfm" 1755987285 520 7bb3abb160b19e0ed6ac404bb59052b7 ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1755987285 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1755987285 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/share/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb" 1755987285 55526 184de5d68af8c544d6d1653244a2b006 ""
   "/usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb" 1755987285 44729 811d6c62865936705a31c797a1d5dada ""
   "/usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb" 1755987285 46026 6dab18b61c907687b520c72847215a68 ""
@@ -102,9 +105,9 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1762797982 5306876 69c328245ae101f6bc10b01e1f2bf9d5 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1762797917 2008249 7a70b0a3583c91cefbdb0c10d74d2473 ""
   "acl.sty" 1764874011.12048 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "main.aux" 1764874163.57795 1370 cb90bad8707e346ea49ac5f3c0a6a6c4 "pdflatex"
-  "main.out" 1764874163.57895 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
-  "main.tex" 1764874161.88135 16888 ff48702350a2c1d7141e883ee473e7d6 ""
+  "main.aux" 1764876094.93203 1370 cb90bad8707e346ea49ac5f3c0a6a6c4 "pdflatex"
+  "main.out" 1764876094.93303 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
+  "main.tex" 1764876093.28942 17107 607c5c332e1efec92584cc2594a1e414 ""
   (generated)
   "main.aux"
   "main.log"
