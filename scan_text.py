@@ -10,6 +10,7 @@ import cv2
 import joblib
 import sys
 import os
+import json, re
 from preprocessing import potential_segmentation_columns
 
 # Paths
@@ -68,37 +69,37 @@ class CNNModel(nn.Module):
         return x
 
 def preprocess_image(img, img_size=(64, 64), count_debug=0):
-    # Load grayscale
-    img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-
+    # ---- Load grayscale ----
+    # img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     if img is None:
         raise ValueError(f"Could not read image: {img}")
 
-    # Convert to uint8 if not
+    # Ensure uint8
     if img.dtype != np.uint8:
         img = (img * 255).clip(0, 255).astype(np.uint8)
 
-    # Crop image to just non-white pixels
-    mask = img < 200  # treat pixels < 200 as non-white
+    # median blur to reduce noise
+    img = cv2.medianBlur(img, 3)
 
-    # Crop to bounding box of non-white pixels
+    # ---- OTSU Thresholding to detect foreground ----
+    # OTSU returns: ret (threshold_value), binary_image
+    _, otsu_mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    # Convert mask to boolean (True = foreground)
+    mask = otsu_mask > 0
+
+    # Crop to bounding box
     if np.any(mask):
         coords = np.column_stack(np.where(mask))
-        print(coords.shape)
         y_min, x_min = coords.min(axis=0)
         y_max, x_max = coords.max(axis=0)
         img = img[y_min:y_max + 1, x_min:x_max + 1]
-    else:
-        # Image is empty, just return a blank 64x64 tensor
-        img = np.ones(img_size, dtype=np.float32)
 
-    # Convert to float [0,1]
+    # Normalize to [0,1] 
     img = img.astype(np.float32) / 255.0
 
-    # DEBUGING LINES: write cropped preview image
-    # cv2.imwrite("preview_cropped_image.png", (img * 255).clip(0,255).astype(np.uint8))
-
-    # ---- Resize while preserving aspect ratio ----
+    # ---- Resize with aspect ratio preserved ----
     target_h, target_w = img_size
     h, w = img.shape
 
@@ -108,7 +109,7 @@ def preprocess_image(img, img_size=(64, 64), count_debug=0):
 
     resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
 
-    # ---- Center on white 64x64 canvas ----
+    # ---- Center on white canvas ----
     canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
 
     y_offset = (target_h - new_h) // 2
@@ -120,14 +121,14 @@ def preprocess_image(img, img_size=(64, 64), count_debug=0):
     tensor = torch.tensor(canvas).unsqueeze(0).unsqueeze(0)
 
     # DEBUGING LINES: Save preview image
-    preview = tensor.squeeze().cpu().numpy()
-    preview_uint8 = (preview * 255).clip(0, 255).astype(np.uint8)
+    # preview = tensor.squeeze().cpu().numpy()
+    # preview_uint8 = (preview * 255).clip(0, 255).astype(np.uint8)
 
-    output_path = f"debug/preview_processed_image_{count_debug}.png"
-    if not cv2.imwrite(output_path, preview_uint8):
-        raise ValueError("Could not write preview image.")
+    # output_path = f"debug/preview_processed_image_{count_debug}.png"
+    # if not cv2.imwrite(output_path, preview_uint8):
+    #     raise ValueError("Could not write preview image.")
 
-    print(f"Saved preview image to: {output_path}")
+    # print(f"Saved preview image to: {output_path}")
     # print(f"Processed tensor shape: {tensor.shape}")
 
     return tensor
@@ -171,10 +172,74 @@ def predict_word(image_path, model, label_encoder, img_size=(64,64)):
             label = label_encoder.inverse_transform([pred_idx])[0]
             predicted_text += label
 
-    return predicted_text
+    return predicted_text, count_debug
 
+def filter_MNIST(dir):
+    """
+    Filter valid words from WordsMNIST dataset JSON file.
+    Only includes words with alphanumeric characters.
+    """
+    with open(dir, "r") as f:
+        data = json.load(f)
+    valid_files = []
+    pattern = re.compile(r'^[A-Za-z0-9]+$')  # only letters and numbers
+    for filename, value in data.items():
+        if pattern.fullmatch(value):
+            valid_files.append(filename)
+        else:
+            # print(f"Skipping invalid word: {value} in file: {filename}")
+            pass
+    return valid_files
 
-if __name__ == "__main__":
+def load_MINST(valid_files, p, model=None, label_encoder=None, img_size=None):
+    with open(p, "r") as f:
+        data = json.load(f)
+
+    correct = 0
+    kinda_correct = 0
+    total = 0
+    O_case_conflict = 0 # count of 'o' and 'O' mixups
+
+    for x in valid_files:
+        dirl = "/u50/chandd9/al3/MNIST_dataset/v011_words_small/" + x
+        # load and compute segmentation
+        # print(f"Processing file: {dirl}, x: {x}")
+        characters = potential_segmentation_columns(dirl)
+        # check if outputed segmentation is correct
+        # if the len of characters matches the len of the label in json
+        # print(f"len characters: {len(characters)} and label: {data[x]}")
+        if len(characters) != len(data[x]):
+            continue
+        # predict words
+        predicted_words, count_debug = predict_word(dirl, model, label_encoder, img_size)
+        # count_debug = 0
+        print(f"File: {x}, True Label: {data[x]}, Predicted: {predicted_words}, Length of segmentation: {count_debug}")
+        if predicted_words == data[x]:
+            correct += 1
+        elif sum(1 for a, b in zip(predicted_words, data[x]) if a == b) >= len(data[x]) - 1:
+            kinda_correct += 1
+        # if char O is mispredicted as 0 or vice versa count it, or o and O mixup
+        for a, b in zip(predicted_words, data[x]):
+            if (a == 'o' and b == 'O') or (a == 'O' and b == 'o'):
+                O_case_conflict += 1
+                break
+        total += 1
+    print(f"Final Accuracy on MNIST words: {correct}/{total} = {correct/total*100:.2f}%")
+    print(f"Kinda Correct (1 char off okay) on MNIST words: {correct + kinda_correct}/{total} = {(correct + kinda_correct)/total*100:.2f}%")
+    print(f"'o' and 'O' mixups in words counted: {O_case_conflict}")
+
+def test_on_MINST():
+    img_size = (64, 64)
+
+    # Load model and label encoder
+    model = load_model(img_size)
+    model.to(device)
+    label_encoder = load_label_encoder()
+
+    valid_MNIST_words = filter_MNIST("/u50/chandd9/al3/MNIST_dataset/v011_words_small/v011_labels_small.json")
+    load_MINST(valid_MNIST_words, "/u50/chandd9/al3/MNIST_dataset/v011_words_small/v011_labels_small.json", model, label_encoder, img_size)
+
+def single_file_test():
     if len(sys.argv) != 2:
         print("Usage: python scan_text.py <image_path>")
         sys.exit(1)
@@ -184,7 +249,6 @@ if __name__ == "__main__":
     # Preprocess image
     img_size = (64, 64)
 
-    # Load model and label encoder
     model = load_model(img_size)
     model.to(device)
     label_encoder = load_label_encoder()
@@ -193,3 +257,9 @@ if __name__ == "__main__":
 
     # print(f"Predicted class index: {pred_idx}")
     print(f"Predicted label: {predicted_words}")
+
+if __name__ == "__main__":
+    # uncomment to test with the MNIST words dataset
+    test_on_MINST()
+    # uncomment to test with a single image file input from command line
+    # single_file_test()
