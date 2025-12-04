@@ -120,7 +120,9 @@ to ensure consistency in the following preprocessing steps. Then,
 all white pixels on the edge of the letter are cropped out (the cropping is 
 similar to a bounding box being placed around the letter/digit and then all 
 pixels outside of it removed from the image). The image is then scaled to 
-have dimensions of 64x64, and finally, it is turned into a tensor. After this 
+have dimensions of 64x64, and finally, it is turned into a tensor. Before 
+being fed to the model, a corresponding list of labels is generated from the 
+provided labels for more convenient access. After this 
 preprocessing, the images from this dataset can be inputted to the model. This 
 preprocessing here assumes the image contains a single character; however, for 
 images with more than one character, extra preprocessing was needed.
@@ -183,7 +185,12 @@ and better quality.
 \item diff features and inputs for pre processing. 
 \end{itemize}
 
-The
+\hspace{\parindent}The inputs to the current model are 64x64 dimension 
+images. In our final version of our model, no feature engineering, 
+representation learning, feature selection, or augmentation was done. The 
+preprocessing as described above was done and then the image(s) were fed 
+into the model. However, before we finalized our model, we used a different 
+set of features. 
 
 \section{Implementation}
 
