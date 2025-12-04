@@ -175,22 +175,38 @@ rest are unmarked. Finally, the original image is cropped according to these
 columns and the individual images are returned. This method worked much better
 than the first one and is near guaranteed to work when there are gaps between
 characters. When there aren't any gaps, it still performs well and better than
-the first method, but clearly not as good. This method was chosen to character 
+the first method, but clearly not as good. This method was chosen for character 
 segmentation due to its consistency (it is easier to find out why it fails)
 and better quality.
 
 \section{Features and Inputs}
 
 \begin{itemize} 
-\item diff features and inputs for pre processing. 
+\item diff features and inputs for preprocessing. 
 \end{itemize}
 
 \hspace{\parindent}The inputs to the current model are 64x64 dimension 
 images. In our final version of our model, no feature engineering, 
 representation learning, feature selection, or augmentation was done. The 
 preprocessing as described above was done and then the image(s) were fed 
-into the model. However, before we finalized our model, we used a different 
-set of features. 
+into the model. We chose to do this as this is how images are normally fed into 
+a convolutional neural network (CNN). 
+
+Before we finalized our model, we used a different 
+set of features. Originally, we generated Histogram of Oriented Gradients 
+(HOG) features to feed our model. This is feature engineering technique that 
+is used for object detection. Due to this, we chose to use it for our early 
+models. The HOG features were varied by changing the parameters that define 
+how they are generated. For example, the number of cells/boxes that features
+are calculated for (gradients are calculated for each cell and cells represent 
+boxes larger than pixels that the image can be split into)
+can be changed and this can drastically change the size 
+of each individual feature. For example, the cell size being decreased can 
+greatly increase the number of features since much more gradients are being 
+calculated for the image (a smaller cell size means more cells are needed to 
+cover the image and gradients are calculated for each cell). Conversely, the 
+cell size being increased can 
+greatly decrease the size of each feature since less gradients are calculated.
 
 \section{Implementation}
 
