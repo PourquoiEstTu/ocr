@@ -10,7 +10,7 @@ import joblib
 from model_cnn import CNNModel
 
 
-IMAGE_PATH = "/u50/chandd9/downloads/letters_numbers/i.png"
+IMAGE_PATH = "/u50/chandd9/downloads/letters_numbers/h.png"
 MODEL_PATH = "/u50/chandd9/al3/ocr_model.pth" 
 LABEL_ENCODER_PATH = "/u50/chandd9/al3/label_encoder.joblib" 
 IMG_SIZE = (64, 64)
@@ -18,33 +18,97 @@ DEVICE = "cuda"
 OUT_SIZE = 62    # number of classes
 # -----------------------------
 
-def preprocess_image(image_path, img_size=(64, 64)):
-    # ---- Load grayscale ----
-    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    if img is None:
-        raise ValueError(f"Could not read image: {image_path}")
+# def preprocess_image(image_path, img_size=(64, 64)):
+#     # ---- Load grayscale ----
+#     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+#     if img is None:
+#         raise ValueError(f"Could not read image: {image_path}")
 
-    # Convert to uint8 if not
+#     # Convert to uint8 if not
+#     if img.dtype != np.uint8:
+#         img = (img * 255).clip(0, 255).astype(np.uint8)
+
+#     # Crop image to just non-white pixels
+#     mask = img < 200  # treat pixels < 200 as non-white
+
+#     # Crop to bounding box of non-white pixels
+#     if np.any(mask):
+#         coords = np.column_stack(np.where(mask))
+#         y_min, x_min = coords.min(axis=0)
+#         y_max, x_max = coords.max(axis=0)
+#         img = img[y_min:y_max + 1, x_min:x_max + 1]
+
+#     # Convert to float [0,1]
+#     img = img.astype(np.float32) / 255.0
+
+#     # write cropped preview image
+#     # cv2.imwrite("preview_cropped_image.png", (img * 255).clip(0,255).astype(np.uint8))
+
+#     # ---- Resize while preserving aspect ratio ----
+#     target_h, target_w = img_size
+#     h, w = img.shape
+
+#     scale = min(target_w / w, target_h / h)
+#     new_w = int(w * scale)
+#     new_h = int(h * scale)
+
+#     resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
+#     # ---- Center on white 64x64 canvas ----
+#     canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
+
+#     y_offset = (target_h - new_h) // 2
+#     x_offset = (target_w - new_w) // 2
+
+#     canvas[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = resized
+
+#     # Add channel + batch dims → (1,1,64,64)
+#     tensor = torch.tensor(canvas).unsqueeze(0).unsqueeze(0)
+
+#     # ---- Save preview image ----
+#     preview = tensor.squeeze().cpu().numpy()
+#     preview_uint8 = (preview * 255).clip(0, 255).astype(np.uint8)
+
+#     output_path = "preview_processed_image.png"
+#     if not cv2.imwrite(output_path, preview_uint8):
+#         raise ValueError("Could not write preview image.")
+
+#     print(f"Saved preview image to: {output_path}")
+#     print(f"Processed tensor shape: {tensor.shape}")
+
+#     return tensor
+
+def preprocess_image(img, img_size=(64, 64), count_debug=0):
+    # ---- Load grayscale ----
+    img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError(f"Could not read image: {img}")
+
+    # Ensure uint8
     if img.dtype != np.uint8:
         img = (img * 255).clip(0, 255).astype(np.uint8)
 
-    # Crop image to just non-white pixels
-    mask = img < 200  # treat pixels < 200 as non-white
+    # median blur to reduce noise
+    img = cv2.medianBlur(img, 3)
 
-    # Crop to bounding box of non-white pixels
+    # ---- OTSU Thresholding to detect foreground ----
+    # OTSU returns: ret (threshold_value), binary_image
+    _, otsu_mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    # Convert mask to boolean (True = foreground)
+    mask = otsu_mask > 0
+
+    # Crop to bounding box
     if np.any(mask):
         coords = np.column_stack(np.where(mask))
         y_min, x_min = coords.min(axis=0)
         y_max, x_max = coords.max(axis=0)
         img = img[y_min:y_max + 1, x_min:x_max + 1]
 
-    # Convert to float [0,1]
+    # Normalize to [0,1] 
     img = img.astype(np.float32) / 255.0
 
-    # write cropped preview image
-    # cv2.imwrite("preview_cropped_image.png", (img * 255).clip(0,255).astype(np.uint8))
-
-    # ---- Resize while preserving aspect ratio ----
+    # ---- Resize with aspect ratio preserved ----
     target_h, target_w = img_size
     h, w = img.shape
 
@@ -54,7 +118,7 @@ def preprocess_image(image_path, img_size=(64, 64)):
 
     resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
 
-    # ---- Center on white 64x64 canvas ----
+    # ---- Center on white canvas ----
     canvas = np.ones((target_h, target_w), dtype=np.float32)  # white background
 
     y_offset = (target_h - new_h) // 2
@@ -65,16 +129,16 @@ def preprocess_image(image_path, img_size=(64, 64)):
     # Add channel + batch dims → (1,1,64,64)
     tensor = torch.tensor(canvas).unsqueeze(0).unsqueeze(0)
 
-    # ---- Save preview image ----
-    preview = tensor.squeeze().cpu().numpy()
-    preview_uint8 = (preview * 255).clip(0, 255).astype(np.uint8)
+    # DEBUGING LINES: Save preview image
+    # preview = tensor.squeeze().cpu().numpy()
+    # preview_uint8 = (preview * 255).clip(0, 255).astype(np.uint8)
 
-    output_path = "preview_processed_image.png"
-    if not cv2.imwrite(output_path, preview_uint8):
-        raise ValueError("Could not write preview image.")
+    # output_path = f"debug/preview_processed_image_{count_debug}.png"
+    # if not cv2.imwrite(output_path, preview_uint8):
+    #     raise ValueError("Could not write preview image.")
 
-    print(f"Saved preview image to: {output_path}")
-    print(f"Processed tensor shape: {tensor.shape}")
+    # print(f"Saved preview image to: {output_path}")
+    # print(f"Processed tensor shape: {tensor.shape}")
 
     return tensor
 
