@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764873234.0292 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764873235.34698 0
-  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764873233.5685 14487 b305c1086f9eede9ffc01895b68540d0 ""
+["pdflatex"] 1764874053.82551 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764874055.18458 0
+  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764874053.34984 14515 6febce4227300d03a11465c77ac77390 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1755987285 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1755987285 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -101,10 +101,10 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1755987285 42087 b0f9697c952c8f5a8eede4134282cb0d ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1762797982 5306876 69c328245ae101f6bc10b01e1f2bf9d5 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1762797917 2008249 7a70b0a3583c91cefbdb0c10d74d2473 ""
-  "acl.sty" 1764791307.04457 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "main.aux" 1764873235.2445 1370 c340f7a6b6fc71910d84eca731477455 "pdflatex"
-  "main.out" 1764873235.2445 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
-  "main.tex" 1764873233.5685 14487 b305c1086f9eede9ffc01895b68540d0 ""
+  "acl.sty" 1764874011.12048 11615 e2c027f483aa40e577ed34264c8b0655 ""
+  "main.aux" 1764874055.08786 1370 c340f7a6b6fc71910d84eca731477455 "pdflatex"
+  "main.out" 1764874055.08886 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
+  "main.tex" 1764874053.34984 14515 6febce4227300d03a11465c77ac77390 ""
   (generated)
   "main.aux"
   "main.log"
