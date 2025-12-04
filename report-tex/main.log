@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.10)  4 DEC 2025 00:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.10)  4 DEC 2025 13:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -404,12 +404,12 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 81.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 100.
  (/usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 118.
+(Font)              scaled to size 10.95pt on input line 113.
 
 
 
@@ -419,38 +419,38 @@ LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
 
 
 ]
-Underfull \hbox (badness 1642) in paragraph at lines 161--181
+Underfull \hbox (badness 1642) in paragraph at lines 156--176
 []\T1/ptm/m/n/10.95 (+20) The sec-ond, more suc-cess-ful seg-men-ta-tion
  []
 
 
 
 
-Package natbib Warning: Citation `deCampos09' undefined on input line 285.
+Package natbib Warning: Citation `deCampos09' undefined on input line 287.
 
 
-Package natbib Warning: Citation `abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024' undefined on input line 287.
+Package natbib Warning: Citation `abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024' undefined on input line 289.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' undefined on input line 289.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' undefined on input line 291.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-1904-08920' undefined on input line 291.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1904-08920' undefined on input line 293.
 
 
-Package natbib Warning: Citation `westerdijk2025improvingocrhistoricaltexts' undefined on input line 293.
+Package natbib Warning: Citation `westerdijk2025improvingocrhistoricaltexts' undefined on input line 295.
 
 
-Package natbib Warning: Citation `kiessling:hal-04936936' undefined on input line 295.
+Package natbib Warning: Citation `kiessling:hal-04936936' undefined on input line 297.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-2109-10282' undefined on input line 297.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2109-10282' undefined on input line 299.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-1802-02611' undefined on input line 299.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1802-02611' undefined on input line 301.
 
 
-Package natbib Warning: Citation `OCR-CRNN' undefined on input line 301.
+Package natbib Warning: Citation `OCR-CRNN' undefined on input line 303.
 
 
 
@@ -467,18 +467,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 25CDFEEDA6A1B03613FF5C55A92121AF;857.
  ) 
 Here is how much of TeX's memory you used:
- 13971 strings out of 475171
- 222657 string characters out of 5767094
+ 13984 strings out of 475171
+ 222799 string characters out of 5767094
  668440 words of memory out of 5000000
- 36662 multiletter control sequences out of 15000+600000
- 579719 words of font info for 138 fonts, out of 8000000 for 9000
+ 36664 multiletter control sequences out of 15000+600000
+ 582776 words of font info for 144 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  90i,10n,93p,1037b,447s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on main.pdf (2 pages, 56531 bytes).
+Output written on main.pdf (2 pages, 56670 bytes).
 PDF statistics:
- 71 PDF objects out of 1000 (max. 8388607)
- 60 compressed objects within 1 object stream
- 11 named destinations out of 1000 (max. 500000)
- 21049 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 74 PDF objects out of 1000 (max. 8388607)
+ 63 compressed objects within 1 object stream
+ 13 named destinations out of 1000 (max. 500000)
+ 25145 words of extra memory for PDF output out of 29859 (max. 10000000)
 
