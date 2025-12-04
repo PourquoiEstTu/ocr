@@ -253,8 +253,9 @@ The output of these layers are fed into two fully connected linear layers
 containing 256 hidden neurons and a final output
 layer corresponding to the number of classes within our dataset.
 
-Training was done with an 80/20 training-test split where the dataset was 
-randomized before being split. A batch size of 16 was used with a 0.03 
+Training was done with an 80/10/10 training-validation-test split where the 
+dataset was randomized before being split. A batch size of 
+16 was used with a 0.03 
 learning rate and weight decay of 1e-3 for the SGD optimizer. Similar to the 
 previous model, early stopping is implemented to stop learning when validation 
 accuracy stops improving. Using this model, we achieve a test accuracy of 
@@ -264,14 +265,36 @@ Once again, we compare this model to some baselines. It is clearly better
 than our previous model and the random baseline. We will also compare it 
 with other state of the art OCR models. The models we will compare against, 
 unlike our model, are much more complex 
-and takes whole PDF documents as input. We use a table sourced from 
-Mistral AI's research into developing their own OCR model. They compare 
+and can take whole PDF documents as input. We use a table sourced from a
+\href{https://mistral.ai/news/mistral-ocr}{report from Mistral AI} that compares 
+their in-house OCR model with others. They compare 
 their model against others on a variety of benchmarks including how well 
 tables and math can be scanned, but we will use their benchmarks for recognizing
 words from different languages only. 
 \begin{center}
   \includegraphics[scale=0.25]{mistral-benchmarks.png}
 \end{center}
+In this table, the \texttt{fr} (French), \texttt{de} (German), and 
+\texttt{es} (spanish) rows are what we will focus on since they use the same 
+script, latin, as our data. As can be seen, the lowest accuracy in 
+this group of three rows is 96.36\% from Google Doc AI. Every other models 
+performs better than this. 
+
+There is one main reason and a smaller second reason that we believe to be the 
+cause of our model 
+performing worse than these models. The first is the size of our training data.
+Although these models are closed source and so we cannot know exactly what they
+have been trained on, given that they can extract text, tables, math, etc. from 
+PDF documents, we can likely safely assume that they have been trained on much
+more data that has much more variety than English characters than our model has. 
+From the outset, our model was not planned to be so advanced and we made 
+our architectural and data decisions with that in mind. The models in Mistral
+AI's report are meant to be used by large corporations to reliably automate  
+document processing. They developed their own models as such.
+The second, smaller reason is computation power. We had access to McMaster's two 
+H100 GPUs to train our model, but with more GPUs, we could have used many more 
+layers as well as some of the techniques learned in class such as residual 
+blocks to boost our accuracy. 
 
 % Our initial model was implemented using Pytorch using a Convolutional Neural Network
 
