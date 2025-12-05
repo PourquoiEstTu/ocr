@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.10)  4 DEC 2025 20:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.10)  4 DEC 2025 21:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -408,10 +408,12 @@ LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 10
  (/usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 117.
+
+
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 113.
-
-
+(Font)              scaled to size 10.95pt on input line 122.
 
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}
@@ -419,122 +421,125 @@ LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
 
 
 ]
-Underfull \hbox (badness 1642) in paragraph at lines 156--176
+Underfull \hbox (badness 1642) in paragraph at lines 184--204
 []\T1/ptm/m/n/10.95 (+20) The sec-ond, more suc-cess-ful seg-men-ta-tion
  []
 
 
 
 
-Underfull \hbox (badness 1946) in paragraph at lines 224--232
+
+[2]
+Underfull \hbox (badness 1946) in paragraph at lines 252--260
 []\T1/ptm/m/n/10.95 (+20) Training was con-ducted on a 80/20 train-
  []
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 234.
 
 
-[2]
-
-<mistral-benchmarks.png, id=53, 1116.17pt x 662.475pt>
+<mistral-benchmarks.png, id=51, 1116.17pt x 662.475pt>
 File: mistral-benchmarks.png Graphic file (type png)
 <use mistral-benchmarks.png>
-Package pdftex.def Info: mistral-benchmarks.png  used on input line 280.
+Package pdftex.def Info: mistral-benchmarks.png  used on input line 308.
 (pdftex.def)             Requested size: 279.04181pt x 165.61835pt.
 
-Overfull \hbox (59.95567pt too wide) in paragraph at lines 280--281
+Overfull \hbox (59.95567pt too wide) in paragraph at lines 308--309
  [] 
  []
 
 
 
 [3 <./mistral-benchmarks.png (PNG copy)>]
-Underfull \hbox (badness 2837) in paragraph at lines 358--366
-\T1/ptm/m/n/10.95 (+20) To ad-dress the is-sue of '0'/'O' and up-per-
+Underfull \hbox (badness 2012) in paragraph at lines 343--344
+[]\T1/ptm/m/n/10.95 (+20) Using the MNIST dataset con-tain-ing 10K
  []
 
 
 
-<still.jpeg, id=59, 176.15813pt x 54.2025pt>
+
+Underfull \hbox (badness 2837) in paragraph at lines 376--384
+\T1/ptm/m/n/10.95 (+20) To ad-dress the is-sue of '0'/'O' and up-per-
+ []
+
+
+Underfull \vbox (badness 2080) has occurred while \output is active []
+
+
+
+[4]
+<still.jpeg, id=64, 176.15813pt x 54.2025pt>
 File: still.jpeg Graphic file (type jpg)
 <use still.jpeg>
-Package pdftex.def Info: still.jpeg  used on input line 375.
+Package pdftex.def Info: still.jpeg  used on input line 393.
 (pdftex.def)             Requested size: 88.07884pt x 27.10118pt.
-<LL.png, id=61, 76.03406pt x 72.27pt>
+<LL.png, id=66, 76.03406pt x 72.27pt>
 File: LL.png Graphic file (type png)
 <use LL.png>
-Package pdftex.def Info: LL.png  used on input line 380.
+Package pdftex.def Info: LL.png  used on input line 398.
 (pdftex.def)             Requested size: 38.01692pt x 36.1349pt.
-<unsatisfactory.png, id=62, 431.6125pt x 102.3825pt>
+<unsatisfactory.png, id=67, 431.6125pt x 102.3825pt>
 File: unsatisfactory.png Graphic file (type png)
 <use unsatisfactory.png>
-Package pdftex.def Info: unsatisfactory.png  used on input line 389.
+Package pdftex.def Info: unsatisfactory.png  used on input line 407.
 (pdftex.def)             Requested size: 215.80571pt x 51.19112pt.
 
 
-[4 <./still.jpeg> <./LL.png (PNG copy)> <./unsatisfactory.png (PNG copy)>]
-<left-half-u.png, id=71, 445.665pt x 160.6pt>
+<left-half-u.png, id=68, 445.665pt x 160.6pt>
 File: left-half-u.png Graphic file (type png)
 <use left-half-u.png>
-Package pdftex.def Info: left-half-u.png  used on input line 394.
+Package pdftex.def Info: left-half-u.png  used on input line 412.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<right-half-u.png, id=72, 445.665pt x 160.6pt>
+<right-half-u.png, id=69, 445.665pt x 160.6pt>
 File: right-half-u.png Graphic file (type png)
 <use right-half-u.png>
-Package pdftex.def Info: right-half-u.png  used on input line 395.
+Package pdftex.def Info: right-half-u.png  used on input line 413.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<left-half-n.png, id=73, 445.665pt x 160.6pt>
+<left-half-n.png, id=70, 445.665pt x 160.6pt>
 File: left-half-n.png Graphic file (type png)
 <use left-half-n.png>
-Package pdftex.def Info: left-half-n.png  used on input line 398.
+Package pdftex.def Info: left-half-n.png  used on input line 416.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<right-half-n.png, id=74, 445.665pt x 160.6pt>
+<right-half-n.png, id=71, 445.665pt x 160.6pt>
 File: right-half-n.png Graphic file (type png)
 <use right-half-n.png>
-Package pdftex.def Info: right-half-n.png  used on input line 399.
+Package pdftex.def Info: right-half-n.png  used on input line 417.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
 
-
-Package natbib Warning: Citation `deCampos09' undefined on input line 465.
-
-
-Package natbib Warning: Citation `abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024' undefined on input line 467.
+Package natbib Warning: Citation `deCampos09' undefined on input line 483.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' undefined on input line 469.
+Package natbib Warning: Citation `abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024' undefined on input line 485.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-1904-08920' undefined on input line 471.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' undefined on input line 487.
 
 
-Package natbib Warning: Citation `westerdijk2025improvingocrhistoricaltexts' undefined on input line 473.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1904-08920' undefined on input line 489.
 
 
-Package natbib Warning: Citation `kiessling:hal-04936936' undefined on input line 475.
+Package natbib Warning: Citation `westerdijk2025improvingocrhistoricaltexts' undefined on input line 491.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-2109-10282' undefined on input line 477.
+Package natbib Warning: Citation `kiessling:hal-04936936' undefined on input line 493.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-1802-02611' undefined on input line 479.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2109-10282' undefined on input line 495.
 
 
-Package natbib Warning: Citation `OCR-CRNN' undefined on input line 481.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1802-02611' undefined on input line 497.
 
 
-Package natbib Warning: Citation `MISTRAL' undefined on input line 483.
+Package natbib Warning: Citation `OCR-CRNN' undefined on input line 499.
 
+
+Package natbib Warning: Citation `MISTRAL' undefined on input line 501.
 
 
 
-
-[5
-
- <./left-half-u.png (PNG copy)> <./right-half-u.png (PNG copy)> <./left-half-n.png (PNG copy)> <./right-half-n.png (PNG copy)>]
+[5 <./still.jpeg> <./LL.png (PNG copy)> <./unsatisfactory.png (PNG copy)> <./left-half-u.png (PNG copy)> <./right-half-u.png (PNG copy)> <./left-half-n.png (PNG copy)> <./right-half-n.png (PNG copy)>]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 517.
+(Font)              <7> on input line 535.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 517.
+(Font)              <5> on input line 535.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -557,15 +562,15 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 25CDFEEDA6A1B03613FF5C55A92121AF;857.
  ) 
 Here is how much of TeX's memory you used:
- 14146 strings out of 475171
- 225402 string characters out of 5767094
+ 14149 strings out of 475171
+ 225432 string characters out of 5767094
  718541 words of memory out of 5000000
  36763 multiletter control sequences out of 15000+600000
- 593801 words of font info for 184 fonts, out of 8000000 for 9000
+ 593931 words of font info for 186 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,10n,93p,1037b,458s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,10n,93p,1037b,453s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on main.pdf (6 pages, 469779 bytes).
+Output written on main.pdf (6 pages, 474331 bytes).
 PDF statistics:
  117 PDF objects out of 1000 (max. 8388607)
  89 compressed objects within 1 object stream
