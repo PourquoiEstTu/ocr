@@ -432,9 +432,13 @@ document processing. They developed their own models as such.
 The second, smaller reason is computation power. We had access to McMaster's two 
 H100 GPUs to train our model, but with more GPUs, we could have used many more 
 layers as well as some of the techniques learned in class such as residual 
-blocks to boost our accuracy. 
+blocks to boost our accuracy. We use this model in a python file that takes a input
+parameter of the path to where a image is stored, and outputs the predicted text obtained 
+from running out CNN model on the segmented images. 
 
 % Our initial model was implemented using Pytorch using a Convolutional Neural Network
+
+
 
 \section{Evaluation}
 The Main evaluation metrics that we tracked to measure how well our models were doing were Character 
