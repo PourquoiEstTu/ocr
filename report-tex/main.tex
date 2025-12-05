@@ -302,9 +302,38 @@ blocks to boost our accuracy.
 % Our initial model was implemented using Pytorch using a Convolutional Neural Network
 
 \section{Evaluation}
-The Main evaluation metrics that we tracked to measure how well our models were doing were Character Classification Accuracy and Word Recognition Accuracy. 
+The Main evaluation metrics that we tracked to measure how well our models were doing were Character 
+Classification Accuracy and Word Recognition Accuracy. 
 
-Using the MNIST dataset containing 10K printed text words, we chose 6001 images from it to test our model on. These images were chosen from which ones resulted in a "valid word segmentation". We determined this by running our word segmentation code upon it, and if the number of segmented images returns from it matched the amount of letters in the images label, it was a valid word segmentation. This means that our word segmentation algorithm failed to accurately segment 3999 of the images.
+\subsection*{Character Classification Accuracy}
+We evaluate the character classifcation accruacy by calculating the accuracy, precision, 
+recall, and F1-Score after training our models, and comparing it to eachother and a 
+basic "majority class" baseline. (predicting the label for a image based on their 
+appearance in our dataset). 
+
+Examining our HOG model, we can see the accuracy, precision, recall, F1-Score, and
+support values obtained after training in (link). Looking at (link) we can see that this model
+achieves an overall accuracy of 67\% on the test set of 682 samples. The macro-averaged metrics show 
+precision of 68\% and the weighted averaged is 70\%. This represents a strong improvement over 
+the baseline and demonstrates that the model has learned meaningful patterns from
+the HOG features. This beats the baseline on our dataset which would have a 1.6\% accuracy, as the data the HOG model
+is tested on contains 62 classes, each with 52 images each, giving each class a 1/62=1.6\% chance of being chosen.
+
+Examining our CNN model, the accuracy, precision, recall, F1-Score, and support values obtained after training
+can be viewed in (link). Looking at (link) we can see that this model achieves a overall accuracy of 90\% on
+the test set of 21023 samples. The macro-averaged metrics show 
+precision of 91\% and the weighted averaged is 91\%. This easily beats the baseline on this dataset which is ?? 
+accuracy, as the dataset contians 62 classes, each with approximately 3475 images each, giving each class a
+approximate probablty of 1/62=1.6\% chance of being chosen.
+
+
+\subsection*{Word Recognition Accuracy}
+
+Using the MNIST dataset containing 10K printed text words, we chose 6001 images from it to test our model on. 
+These images were chosen from which ones resulted in a "valid word segmentation". We determined this by running 
+our word segmentation code upon it, and if the number of segmented images returns from it matched the amount of 
+letters in the images label, it was a valid word segmentation. This means that our word segmentation algorithm 
+failed to accurately segment 3999 of the images.
 
 Running our CNN model on these 6001 images of printed text resulted in a 3224 words predicted correctly and therefore achieved a 53.72\% accuracy. Another metric that we tracked was how many words did the model calculate "partially correct", in other words, if we allow 1 character to be incorrectly predicted. The results obtained are that the model predicts 4699 of the words "partially correct", giving a accuracy of 78.3\%. This demonstrates that our model predicted most words correctly, but fails on just one word in the model.
 
@@ -482,6 +511,17 @@ and often incorrectly classifying the words.
 % % \section*{Limitations}
 
 \section*{Team Contributions}
+Dhruv and Arin developed the current iteration of the Convolutional neural network model, including creating 
+HOG linear neural network, the class for the model, writing the training code, measuring the accuracy of the model, and 
+creating a confusion matrix for it. Also worked on preprocessing for the CNN model, training for both HOG and CNN. Worked on the creation of final script that does the classifying. Lastly, implemented additional preprocessing code to make the data 
+suitable for PyTorch models along with code to ensure that if a GPU is present, it will be 
+used in the training process. 
+
+Roshaan contributed to finding the datasets we're using as well as implementing the 
+feature generation and general preprocessing code to input data into the scikit-learn SVMS and 
+PyTorch neural networks. He also attempted to implement
+multiclass SVMs and in tandem with this, he implemented further preprocessing code to make the 
+data suitable for inputting into the SVM. Lastly, he did troubleshooting for GPU clusters.
 
 % Write in this section a few sentences describing the contributions of each team member. What did each member work on? Refer to item 7. \\
 
@@ -490,8 +530,24 @@ and often incorrectly classifying the words.
 
 
 
-\clearpage
+% \clearpage
 \section{Figures and Tables}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{confusion_matrix.png}
+    \caption{HOG Confusion Matrix}
+    \label{fig:confusion_matrix}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{cnn_confusion_matrix.png}
+    \caption{CNN Confusion Matrix}
+    \label{fig:CNN_confusion_matrix}
+\end{figure}
+
+
 
 \begin{table}[H]
   % \centering
