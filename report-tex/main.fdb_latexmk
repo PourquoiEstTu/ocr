@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764895694.17084 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764895695.63606 0
-  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764895692.07491 30916 c314929c00641fd3eecc93f09deddcdb ""
+["pdflatex"] 1764896736.26281 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764896737.75202 0
+  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764896735.93797 30919 20115f62ef4780e8a67cf46c6f051f9f ""
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1755987285 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1755987285 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -110,9 +110,9 @@
   "acl.sty" 1764893031.8429 11615 e2c027f483aa40e577ed34264c8b0655 ""
   "left-half-n.png" 1764892982.06092 13875 717c1a351e6502009db9f384507982ef ""
   "left-half-u.png" 1764892976.4328 13891 dfc8ae031044840424b6d74b1cf1a384 ""
-  "main.aux" 1764895695.51194 1885 23b9b8612ee73b9c053c0572b363fc38 "pdflatex"
-  "main.out" 1764895695.51294 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
-  "main.tex" 1764895692.07491 30916 c314929c00641fd3eecc93f09deddcdb ""
+  "main.aux" 1764896737.63499 1885 23b9b8612ee73b9c053c0572b363fc38 "pdflatex"
+  "main.out" 1764896737.63599 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
+  "main.tex" 1764896735.93797 30919 20115f62ef4780e8a67cf46c6f051f9f ""
   "mistral-benchmarks.png" 1764893031.85408 297774 15a21d473371b764bab8a0e1a1d4ae57 ""
   "right-half-n.png" 1764892983.22595 13924 161498020057bb835d672c12237b6b7d ""
   "right-half-u.png" 1764892980.20788 14020 b58d94f5909909b1508a90e30be1b538 ""
