@@ -170,12 +170,16 @@ Finally, we used the dimensions of each contour to draw a bounding boxes them
 and crop out the 
 characters from the original image using them. Hence, we return an array of 
 images containing each 
-character. One large flaw of this approach is that if the dilation did not 
+character. The large flaw of this approach is that if the dilation did not 
 remove all the space in a character's rough column location, then multiple 
 contours would be drawn in that column. This would mean, for example, that 
 both the bounding box containing ``a'' as well as the circle 
 in ``a'' would be returned as distinct characters. With the variation in font,
-this occurred quite often with ``o''s and ``a''s. 
+this occurred quite often with ``o''s and ``a''s. Another, albeit smaller
+issue was the dilation making the columns occupied smaller. This would lead 
+to the bounding boxes being ``tight'' on the characters and crop portions of them 
+on the edge of the bounding boxes out of the returned images. This led to 
+a small loss of information, but an obvious loss nonetheless.
 
 The second, more successful segmentation function implements the Potential 
 Segmentation Columns (PSC) method from the paper:
@@ -183,7 +187,23 @@ Segmentation Columns (PSC) method from the paper:
 {A New Character Segmentation Approach for Off-Line Cursive Handwritten Words}.
 The same rough process is done as before with the exception of blurring
 before thresholding and instead of dilating the image, we use Zhang 
-Suen's method to thin the characters. After thinning, all columns of pixels 
+Suen's method to thin the characters. We chose not to use blurring with this 
+method as images were more likely to lose line segments after thinning. 
+For example, we had in image which contained ``you$\backslash$'':
+\begin{center}
+  \includegraphics[scale=0.4]{original-you.png}
+\end{center}
+With no blur applied, the thresholded and thinned image looked like this:
+\begin{center}
+  \includegraphics[scale=0.4]{thin-you.png}
+\end{center}
+With median blur applied before thresholding and thinning, the image looked 
+like this:
+\begin{center}
+  \includegraphics[scale=0.4]{broken-you.png}
+\end{center}
+This decreased the accuracy of the column scanning. That is because
+after thinning, all columns of pixels 
 in the images are scanned. If there is less than or exactly 1 pixel (this was 
 generally the PSC threshold/limit for the images in the Words MNIST dataset)
 of white (meaning less than 1 pixel of character), then the column is marked 
@@ -191,12 +211,17 @@ as being a PSC. After the image is fully scanned, the array of marked
 segmentation columns is looped through. For each set of consecutive PSCs, 
 the middle column of the set is chosen as the segmentation column and the 
 rest are unmarked. Finally, the original image is cropped according to these 
-columns and the individual images are returned. This method worked much better
-than the first one and is near guaranteed to work when there are gaps between
-characters. When there aren't any gaps, it still performs well and better than
-the first method, but clearly not as good. This method was chosen for character 
-segmentation due to its consistency (it is easier to find out why it fails)
-and better quality.
+columns and the individual images are returned. Now that this has been described,
+it is easy to see that the image using median blur will generate PSCs in the 
+middle of all three letters; there are clear gaps within the three letters 
+that will marked as PSCs. This results in very poor accuracy for the segmentation,
+so median blur was dropped. This method worked much better
+than the first one and is near guaranteed to work when there are clear vertical
+gaps, even very small ones, between
+characters. When there aren't any such gaps, it still performs well and better 
+than the first method, but clearly not as good. This method was chosen for 
+character segmentation due to its consistency (its effective guarantee to 
+correctly segment characters when vertical gaps exist) and better quality.
 
 \section{Features and Inputs}
 
@@ -568,12 +593,12 @@ data suitable for inputting into the SVM. Lastly, he did troubleshooting for GPU
     \label{fig:confusion_matrix}
 \end{figure}
 
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{cnn_confusion_matrix.png}
-%     \caption{CNN Confusion Matrix}
-%     \label{fig:CNN_confusion_matrix}
-% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{cnn_confusion_matrix.png}
+    \caption{CNN Confusion Matrix}
+    \label{fig:CNN_confusion_matrix}
+\end{figure}
 
 
 
