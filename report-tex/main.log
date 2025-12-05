@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.10)  4 DEC 2025 21:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.10)  4 DEC 2025 22:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -404,11 +404,35 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 113.
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 118.
 
+Underfull \hbox (badness 1112) in paragraph at lines 99--100
+\T1/ptm/m/n/10.95 (+20) Re-fer to item 2. No one has done ex-actly
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
+
+ []
+
+
+Package natbib Warning: Citation `deCampos09' on page 1 undefined on input line 101.
+
+
+
+
+Package natbib Warning: Citation `abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024' on page 1 undefined on input line 111.
+
+
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' on page 1 undefined on input line 119.
+
+
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' on page 1 undefined on input line 123.
+
+
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' on page 1 undefined on input line 128.
+
+
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1904-08920' on page 1 undefined on input line 131.
 
 
 
@@ -417,46 +441,70 @@ LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
 
 
 ]
-Underfull \hbox (badness 1642) in paragraph at lines 184--193
+
+Package natbib Warning: Citation `westerdijk2025improvingocrhistoricaltexts' on page 2 undefined on input line 145.
+
+
+Package natbib Warning: Citation `kiessling:hal-04936936' on page 2 undefined on input line 147.
+
+
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2109-10282' on page 2 undefined on input line 148.
+
+
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1802-02611' on page 2 undefined on input line 150.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 186.
+
+
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 10.95pt on input line 191.
+
+
+[2]
+
+
+Package natbib Warning: Citation `PSC' on page 3 undefined on input line 258.
+
+
+Underfull \hbox (badness 1642) in paragraph at lines 257--264
 []\T1/ptm/m/n/10.95 (+20) The sec-ond, more suc-cess-ful seg-men-ta-tion
  []
 
-
-
-<original-you.png, id=48, 445.665pt x 160.6pt>
+<original-you.png, id=52, 445.665pt x 160.6pt>
 File: original-you.png Graphic file (type png)
 <use original-you.png>
-Package pdftex.def Info: original-you.png  used on input line 194.
+Package pdftex.def Info: original-you.png  used on input line 265.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<thin-you.png, id=49, 445.665pt x 160.6pt>
+<thin-you.png, id=53, 445.665pt x 160.6pt>
 File: thin-you.png Graphic file (type png)
 <use thin-you.png>
-Package pdftex.def Info: thin-you.png  used on input line 198.
+Package pdftex.def Info: thin-you.png  used on input line 269.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<broken-you.png, id=50, 445.665pt x 160.6pt>
+<broken-you.png, id=54, 445.665pt x 160.6pt>
 File: broken-you.png Graphic file (type png)
 <use broken-you.png>
-Package pdftex.def Info: broken-you.png  used on input line 203.
+Package pdftex.def Info: broken-you.png  used on input line 274.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
 
 
-[2 <./original-you.png (PNG copy)> <./thin-you.png (PNG copy)> <./broken-you.png (PNG copy)>]
+[3 <./original-you.png (PNG copy)> <./thin-you.png (PNG copy)> <./broken-you.png (PNG copy)>]
 
 
-Underfull \hbox (badness 1946) in paragraph at lines 280--288
+Underfull \hbox (badness 1946) in paragraph at lines 351--359
 []\T1/ptm/m/n/10.95 (+20) Training was con-ducted on a 80/20 train-
  []
 
 
 
-[3]
-<mistral-benchmarks.png, id=66, 1116.17pt x 662.475pt>
+[4]
+<mistral-benchmarks.png, id=68, 1116.17pt x 662.475pt>
 File: mistral-benchmarks.png Graphic file (type png)
 <use mistral-benchmarks.png>
-Package pdftex.def Info: mistral-benchmarks.png  used on input line 336.
+Package pdftex.def Info: mistral-benchmarks.png  used on input line 407.
 (pdftex.def)             Requested size: 223.23004pt x 132.49265pt.
 
-Overfull \hbox (4.1439pt too wide) in paragraph at lines 336--337
+Overfull \hbox (4.1439pt too wide) in paragraph at lines 407--408
  [] 
  []
 
@@ -464,126 +512,107 @@ Overfull \hbox (4.1439pt too wide) in paragraph at lines 336--337
 
 
 
-[4 <./mistral-benchmarks.png (PNG copy)>]
+[5 <./mistral-benchmarks.png (PNG copy)>]
 
 
-Underfull \hbox (badness 2837) in paragraph at lines 434--442
+Underfull \hbox (badness 2837) in paragraph at lines 505--513
 \T1/ptm/m/n/10.95 (+20) To ad-dress the is-sue of '0'/'O' and up-per-
  []
 
 
 
-[5]
-<still.jpeg, id=91, 176.15813pt x 54.2025pt>
+[6]
+<still.jpeg, id=93, 176.15813pt x 54.2025pt>
 File: still.jpeg Graphic file (type jpg)
 <use still.jpeg>
-Package pdftex.def Info: still.jpeg  used on input line 451.
+Package pdftex.def Info: still.jpeg  used on input line 522.
 (pdftex.def)             Requested size: 88.07884pt x 27.10118pt.
-<LL.png, id=93, 76.03406pt x 72.27pt>
+<LL.png, id=95, 76.03406pt x 72.27pt>
 File: LL.png Graphic file (type png)
 <use LL.png>
-Package pdftex.def Info: LL.png  used on input line 456.
+Package pdftex.def Info: LL.png  used on input line 527.
 (pdftex.def)             Requested size: 38.01692pt x 36.1349pt.
-<unsatisfactory.png, id=94, 431.6125pt x 102.3825pt>
+<unsatisfactory.png, id=96, 431.6125pt x 102.3825pt>
 File: unsatisfactory.png Graphic file (type png)
 <use unsatisfactory.png>
-Package pdftex.def Info: unsatisfactory.png  used on input line 465.
+Package pdftex.def Info: unsatisfactory.png  used on input line 536.
 (pdftex.def)             Requested size: 215.80571pt x 51.19112pt.
-<left-half-u.png, id=95, 445.665pt x 160.6pt>
+<left-half-u.png, id=97, 445.665pt x 160.6pt>
 File: left-half-u.png Graphic file (type png)
 <use left-half-u.png>
-Package pdftex.def Info: left-half-u.png  used on input line 470.
+Package pdftex.def Info: left-half-u.png  used on input line 541.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<right-half-u.png, id=96, 445.665pt x 160.6pt>
+<right-half-u.png, id=98, 445.665pt x 160.6pt>
 File: right-half-u.png Graphic file (type png)
 <use right-half-u.png>
-Package pdftex.def Info: right-half-u.png  used on input line 471.
+Package pdftex.def Info: right-half-u.png  used on input line 542.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<left-half-n.png, id=97, 445.665pt x 160.6pt>
+
+
+<left-half-n.png, id=99, 445.665pt x 160.6pt>
 File: left-half-n.png Graphic file (type png)
 <use left-half-n.png>
-Package pdftex.def Info: left-half-n.png  used on input line 474.
+Package pdftex.def Info: left-half-n.png  used on input line 545.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
-<right-half-n.png, id=98, 445.665pt x 160.6pt>
+<right-half-n.png, id=100, 445.665pt x 160.6pt>
 File: right-half-n.png Graphic file (type png)
 <use right-half-n.png>
-Package pdftex.def Info: right-half-n.png  used on input line 475.
+Package pdftex.def Info: right-half-n.png  used on input line 546.
 (pdftex.def)             Requested size: 178.26283pt x 64.23885pt.
 
+Package natbib Warning: Citation `deCampos09' undefined on input line 612.
 
 
-Package natbib Warning: Citation `deCampos09' undefined on input line 541.
+Package natbib Warning: Citation `abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024' undefined on input line 614.
 
 
-Package natbib Warning: Citation `abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024' undefined on input line 543.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' undefined on input line 616.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-2105-05486' undefined on input line 545.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1904-08920' undefined on input line 618.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-1904-08920' undefined on input line 547.
+Package natbib Warning: Citation `westerdijk2025improvingocrhistoricaltexts' undefined on input line 620.
 
 
-Package natbib Warning: Citation `westerdijk2025improvingocrhistoricaltexts' undefined on input line 549.
+Package natbib Warning: Citation `kiessling:hal-04936936' undefined on input line 622.
 
 
-Package natbib Warning: Citation `kiessling:hal-04936936' undefined on input line 551.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-2109-10282' undefined on input line 624.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-2109-10282' undefined on input line 553.
+Package natbib Warning: Citation `DBLP:journals/corr/abs-1802-02611' undefined on input line 626.
 
 
-Package natbib Warning: Citation `DBLP:journals/corr/abs-1802-02611' undefined on input line 555.
+Package natbib Warning: Citation `OCR-CRNN' undefined on input line 628.
 
 
-Package natbib Warning: Citation `OCR-CRNN' undefined on input line 557.
+Package natbib Warning: Citation `MISTRAL' undefined on input line 630.
 
 
-Package natbib Warning: Citation `MISTRAL' undefined on input line 559.
+Package natbib Warning: Citation `PSC' undefined on input line 632.
 
-<confusion_matrix.png, id=99, 1011.78pt x 867.24pt>
+<confusion_matrix.png, id=101, 1011.78pt x 867.24pt>
 File: confusion_matrix.png Graphic file (type png)
 <use confusion_matrix.png>
-Package pdftex.def Info: confusion_matrix.png  used on input line 609.
-(pdftex.def)             Requested size: 227.62206pt x 195.09412pt.
-
-Overfull \hbox (8.53592pt too wide) in paragraph at lines 609--610
- [][] 
- []
-
-<cnn_confusion_matrix.png, id=100, 1373.13pt x 1228.59pt>
+Package pdftex.def Info: confusion_matrix.png  used on input line 682.
+(pdftex.def)             Requested size: 219.08614pt x 187.7895pt.
+<cnn_confusion_matrix.png, id=102, 1373.13pt x 1228.59pt>
 File: cnn_confusion_matrix.png Graphic file (type png)
 <use cnn_confusion_matrix.png>
-Package pdftex.def Info: cnn_confusion_matrix.png  used on input line 616.
-(pdftex.def)             Requested size: 227.62206pt x 203.64594pt.
-
-Overfull \hbox (8.53592pt too wide) in paragraph at lines 616--617
- [][] 
- []
-
+Package pdftex.def Info: cnn_confusion_matrix.png  used on input line 689.
+(pdftex.def)             Requested size: 219.08614pt x 196.016pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 625.
+(Font)              <7> on input line 744.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 625.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+(Font)              <5> on input line 744.
 
 
-
-[6 <./still.jpeg> <./LL.png (PNG copy)> <./unsatisfactory.png (PNG copy)> <./left-half-u.png (PNG copy)> <./right-half-u.png (PNG copy)> <./left-half-n.png (PNG copy)> <./right-half-n.png (PNG copy)>]
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+[7 <./still.jpeg> <./LL.png (PNG copy)> <./unsatisfactory.png (PNG copy)> <./left-half-u.png (PNG copy)> <./right-half-u.png (PNG copy)> <./left-half-n.png (PNG copy)> <./right-half-n.png (PNG copy)>]
 
 
 
-[7 <./confusion_matrix.png> <./cnn_confusion_matrix.png>]
-
-
-
-[8
-
-]
+[8 <./confusion_matrix.png> <./cnn_confusion_matrix.png>]
 
 Package natbib Warning: There were undefined citations.
 
@@ -596,18 +625,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 94B68133666714215F8AE40701747D14;869.
  ) 
 Here is how much of TeX's memory you used:
- 14162 strings out of 475171
- 225960 string characters out of 5767094
- 704644 words of memory out of 5000000
- 36778 multiletter control sequences out of 15000+600000
- 593531 words of font info for 182 fonts, out of 8000000 for 9000
+ 14179 strings out of 475171
+ 226112 string characters out of 5767094
+ 721645 words of memory out of 5000000
+ 36777 multiletter control sequences out of 15000+600000
+ 594292 words of font info for 194 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  90i,10n,93p,1037b,462s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on main.pdf (8 pages, 1729645 bytes).
+Output written on main.pdf (8 pages, 1734839 bytes).
 PDF statistics:
- 157 PDF objects out of 1000 (max. 8388607)
- 117 compressed objects within 2 object streams
- 29 named destinations out of 1000 (max. 500000)
+ 155 PDF objects out of 1000 (max. 8388607)
+ 115 compressed objects within 2 object streams
+ 30 named destinations out of 1000 (max. 500000)
  36994 words of extra memory for PDF output out of 42996 (max. 10000000)
 

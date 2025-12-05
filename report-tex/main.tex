@@ -94,6 +94,79 @@ character recognition. We used machine learning
 libraries such as OpenCV, NumPy, Scikit-Learn
 and PyTorch to implement them.
 
+\subsection*{Related Work}
+
+Here, talk about the related work you encountered for your approach. Cite at least 5 references. Refer to item 2. No one has done exactly your task? Write about the most similar thing you can find. This should be around 0.25-0.5 pages. \\
+
+\textbf{Text recognition in natural scenes}. One work we have looked comes from \citealp{deCampos09}. Their work focuses on the recognition of text
+in natural scenes. They created a photographs which contain either of English or Kannada text (we 
+will focus on only the English here). The paper is primarily focused on how well machine learning 
+models can model their dataset. They carry out experiments with different feature representations 
+such as Shape Context and SIFT with nearest neighbour, support vector machines (SVM), and multiple 
+kernel learning (MKL). Two of their conclusions were that even commercial OCR models were not 
+suitable for this task and that shape based features such as Shape Context consistently 
+outperformed appearance based features such as SIFT.
+
+\textbf{Recognizing messy handwriting}. Another work we have looked at is from
+\citealp{abdur_rahim_mia_abdullah_al_mamun_abdullah_al_sajid_aurunave_mollik_ruddra_2024}. Its 
+focus is on recognizing handwritten prescriptions from doctors. It is motivated by handwriting 
+being difficult to read and thus being possible to misinterpret by patients. It used the VGG16 
+model to digitize the many hand-writing styles and drug names with good accuracy. The dataset was 
+created by detecting images with words and then both manually discarding images with non-drug 
+words on them along with manually labelling the images. 
+
+\textbf{TextOCR dataset}. One more paper we read is from 
+\citealp{DBLP:journals/corr/abs-2105-05486}. The main focus of this paper is the dataset they 
+created so that OCR and scene text based reasoning research can be done better. The proposed 
+dataset, TextOCR,
+provides ``high quality and large quantity annotations'' 
+(\citealp{DBLP:journals/corr/abs-2105-05486}, p. 1) on images. The former being easy to understand
+and the latter coming from the dataset containing 28 000 images with 903 000 words in total. The 
+paper goes on to explain how the dataset was annotated and how it compares against other datasets 
+used for OCR model training. The researchers also developed a model called PixelM4C designed 
+to ``text-based reasoning directly on the images unlike previous works which rely on pre-extracted 
+OCR text and features'' (\citealp{DBLP:journals/corr/abs-2105-05486}, p. 2).
+
+\textbf{TextVQA dataset}. The penultimate paper we looked at was 
+\citealp{DBLP:journals/corr/abs-1904-08920}. It was about the new TextVQA dataset 
+(VQA standing for Visual Question Answering)
+they created and the model architecture they developed to solve problems in which 
+looking at the text from an image is needed. The creation of TextVQA was motivated by previous
+datasets for VQA not having many text-related questions and just generally being small in size.
+The images used to make up the dataset are from the Open Images
+v3 dataset. In particular, only images with text in them were used. To add the reasoning
+data, annotators were asked to pose questions that required reading text from the 
+image to answer. Annotators were further asked to come up with questions that differed from their
+previous ones and were given prompts about some of the images in the dataset to check the 
+quality of the data. The model architecture developed is called LoRRA (Look, Read, Reason,
+and Answer). It has VQA and reading components to be able to answer the questions 
+of the kind annotators were asked to produce. 
+
+\textbf{Various text recognition tasks}. The final paper we looked at was \citealp{westerdijk2025improvingocrhistoricaltexts}. This paper
+speaks about three different tasks: recognition of historical text, document layout analysis, and 
+recognition of modern handwriting. The Kraken \citep{kiessling:hal-04936936} and TrOCR 
+\citep{DBLP:journals/corr/abs-2109-10282} models
+were used for the first task. The second task used the DeepLab
+V3+ model \citep{DBLP:journals/corr/abs-1802-02611} for training. 
+The last task used a Convolutional Recurrent Neural Network (CRNN) for feature extraction and then 
+a multi-layer BiLSTM architecture for training. The first and third tasks were of particular
+interest to us. A relevant conclusion of the first task was that careful data preparation and 
+image processing was needed to make the model produce palatable results. The historical text 
+data was very ``messy'' and small in size, so while the model did produce fine results 
+(in part due to it being pretrained on a similar dataset), the training and prediction process
+has many challenges. For the third task, the large conclusion was that model complexity and 
+dataset size needs to be balanced. That is, good data augmentation on a small dataset can
+lead to sizeable increases in model performance just as increasing the model complexity can.
+
+The results from this final paper roughly guided us. While the rest of the 
+paper's were very specific in their research and thus harder to apply for us,
+this final one was more of a survey on text recognition techniques. We chose to  
+use a convolutional network since it gave such good results. Also, this 
+paper spoke to the importance of having good quality data from the outset and 
+implementing good preprocessing so that the model can learn more from it. Due 
+to this, we spent a lot of time on finding suitable preprocessing steps 
+for our data, most of which will be detailed later.
+
 \section{Dataset}
 \hspace{\parindent}We chiefly used two datasets: 
 \href{https://www.kaggle.com/datasets/harieh/ocr-dataset}{OCR-Dataset} and 
@@ -182,9 +255,7 @@ on the edge of the bounding boxes out of the returned images. This led to
 a small loss of information, but an obvious loss nonetheless.
 
 The second, more successful segmentation function implements the Potential 
-Segmentation Columns (PSC) method from the paper:
-\href{https://www.researchgate.net/publication/257719290_A_New_Character_Segmentation_Approach_for_Off-Line_Cursive_Handwritten_Words}
-{A New Character Segmentation Approach for Off-Line Cursive Handwritten Words}.
+Segmentation Columns (PSC) method from \citealp{PSC}.
 The same rough process is done as before with the exception of blurring
 before thresholding and instead of dilating the image, we use Zhang 
 Suen's method to thin the characters. We chose not to use blurring with this 
@@ -557,6 +628,8 @@ and often incorrectly classifying the words.
 \nocite{OCR-CRNN}
 
 \nocite{MISTRAL}
+
+\nocite{PSC}
 
 % \subsection{Equations}
 
