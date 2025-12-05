@@ -365,7 +365,7 @@ basic "majority class" baseline. (predicting the label for a image based on thei
 appearance in our dataset). 
 
 Examining our HOG model, we can see the accuracy, precision, recall, F1-Score, and
-support values obtained after training in (link). Looking at (link) we can see that this model
+support values obtained after training in \autoref{tab:old_results}. Looking at  \autoref{tab:old_results} we can see that this model
 achieves an overall accuracy of 67\% on the test set of 682 samples. The macro-averaged metrics show 
 precision of 68\% and the weighted averaged is 70\%. This represents a strong improvement over 
 the baseline and demonstrates that the model has learned meaningful patterns from
@@ -373,7 +373,7 @@ the HOG features. This beats the baseline on our dataset which would have a 1.6\
 is tested on contains 62 classes, each with 52 images each, giving each class a 1/62=1.6\% chance of being chosen.
 
 Examining our CNN model, the accuracy, precision, recall, F1-Score, and support values obtained after training
-can be viewed in (link). Looking at (link) we can see that this model achieves a overall accuracy of 90\% on
+can be viewed in \autoref{tab:new_results}. Looking at \autoref{tab:new_results} we can see that this model achieves a overall accuracy of 90\% on
 the test set of 21023 samples. The macro-averaged metrics show 
 precision of 91\% and the weighted averaged is 91\%. This easily beats the baseline on this dataset which is ?? 
 accuracy, as the dataset contians 62 classes, each with approximately 3475 images each, giving each class a
@@ -405,12 +405,12 @@ We slightly diverged from the plan of using a pretrained models or a existing li
 implemented a known method for segmenting text obtianed from online research into own code. 
 \section{Error Analysis}
 \subsection*{Results and Analysis}
-Looking the confusion matrix generated for validation set of HOG model, seen in (link). (link) shows both the classes 
+Looking the confusion matrix generated for validation set of HOG model, seen in \autoref{fig:confusion_matrix}. \autoref{fig:confusion_matrix} shows both the classes 
 which are most misclassified and correctly classified. Looking the graph we can see that the classes '0'/'O', '1'/'I', 
 and 'n'/'r'  are often misclassified as each other, which makes sense as they share very similar shapes, and therefore 
 will have very similar HOG features. 
 
-The confusion matrix generated for the CNN model can be seen (link). (link) shows a similar pattern as the HOG model, 
+The confusion matrix generated for the CNN model can be seen \autoref{fig:CNN_confusion_matrix}. \autoref{fig:CNN_confusion_matrix} shows a similar pattern as the HOG model, 
 but is ran with a significantly larger dataset therefore results seem quite different. Looking at the graph, 
 we can continue to see the pattern of classes '0'/'O' being incorrectly classified, once again due to their 
 similar shapes. We can also see new errors such as 'c'/'C', 'l'/'I', or ''/''.
@@ -421,8 +421,8 @@ letters have more clear distinct features), because of the CNN architecture, or 
 
 \subsection*{Potential Solutions}
 To address the issue of '0'/'O' and uppercase/lowercase misclassifications, one potential improvement is to 
-increase the resolution of the input images. Our current 64×64 inputs may be too low to capture the subtle 
-stroke differences between similar characters such as O vs 0 or C vs c. Increasing this to 96×96 or higher 
+increase the resolution of the input images. Our current $64\times64$ inputs may be too low to capture the subtle 
+stroke differences between similar characters such as O vs 0 or C vs c. Increasing this to $96\times96$ or higher 
 could give the model more detailed visual information to learn from. Incorporating data augmentation during 
 training would also help the model generalize better by exposing it to variations in rotation, brightness, 
 and slight distortions. Additionally, reducing the amount of "downsampling", or compression in our CNN 
@@ -586,6 +586,13 @@ data suitable for inputting into the SVM. Lastly, he did troubleshooting for GPU
 % \clearpage
 \section{Figures and Tables}
 
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{cnn_loss_curve.png}
+%     \caption{HOG Confusion Matrix}
+%     \label{fig:confusion_matrix}
+% \end{figure}
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{confusion_matrix.png}
@@ -599,8 +606,6 @@ data suitable for inputting into the SVM. Lastly, he did troubleshooting for GPU
     \caption{CNN Confusion Matrix}
     \label{fig:CNN_confusion_matrix}
 \end{figure}
-
-
 
 \begin{table}[H]
   % \centering
