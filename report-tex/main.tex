@@ -103,45 +103,73 @@ OCR-Dataset consists of the 26 letters of the English alphabet in
 both lower and uppercase along with all 10 digits; across the 62 classes, there 
 are roughly 210 000 images in total. The data uses 3475 different fonts from 
 publicly available Google Fonts. It is the dataset we trained 
-our model on. 
+our model on. It is licensed under CC0: Public Domain. The data is kept within 
+folders with the folder names being the class names. For example, images 
+with the uppercase ``A'' in them are stored with in the ``A\_U'' folder and images 
+with the lowercase ``a'' in them are stored in the ``a\_L'' folder. The names 
+of the images themselves are the same as the folder name with an underscore,
+a number, and the image type appended to them. Using the first part of the 
+example from above, an image stored within the ``A\_U'' folder may have name 
+``A\_U\_$x$.png'' where $x$ is some number. One of our images is named 
+``A\_U\_1003.png''.
 
 There are a number of preprocessing steps done to the images 
-from this dataset. Images are converted to a specific type (\texttt{np.uint8})
+from this dataset. Images are first converted to a specific type 
+(\texttt{np.uint8})
 to ensure consistency in the following preprocessing steps. Then, 
 all white pixels on the edge of the letter are cropped out (the cropping is 
 similar to a bounding box being placed around the letter/digit and then all 
-pixels outside of it removed from the image). The image is then scaled to 
-have dimensions of 64x64, and finally, it is turned into a tensor. Before 
+pixels outside of it being removed from the image). The image is then scaled to 
+have dimensions of 64x64, and finally, it is turned into a tensor that is 
+accepted by PyTorch's \texttt{torch.nn.Conv2d} function. These tensors are 
+saved to disk so that the preprocessing does not have to be repeated 
+each time the model is trained. Before 
 being fed to the model, a corresponding list of labels is generated from the 
-provided labels for more convenient access. After this 
-preprocessing, the images from this dataset can be inputted to the model. This 
-preprocessing here assumes the image contains a single character; however, for 
-images with more than one character, extra preprocessing was needed.
+provided labels and saved to disk for more convenient access similar to the 
+features. These labels are converted from strings to numbers using 
+scikit-learn's \texttt{LabelEncoder} as well. After this 
+preprocessing, the data can be inputted to the model. The preprocessing as 
+described so far assumes every single image contains a single character. So,
+this preprocessing works for the images in this dataset; but, 
+we are aiming to use this model trained only on such images on images with 
+more than one character as well. Clearly, extra preprocessing is needed.
 
 The Words MNIST dataset contains about 10 000 images of various words. All 
 characters from the alphabet (lower and uppercase), all 10 digits, as well as an
-assortment of special characters/punctuation are in the words in the images. The 
-images have variable sizes and need to be resized to be uniform. The images 
+assortment of special characters/punctuation are in the words in the images. 
+The labels are given in a dictionary in a \texttt{json} file. The images
+are not contained within any folders nor have any structure; they are all 
+located in one directory. The names of each image are some number with a dot 
+and the file image file format appended to the number. For example, ``0.jpeg'' 
+contained the word ``BE'' (case sensitivity is intended here). The images 
 mostly come from scanned documents and synthetic generation
 Data was synthetically generated to have lesser seen characters included in the 
 dataset. Some of the images were labelled manually and some of it was 
-labelled using tesseract OCR and then manually checked after for errors. Our 
-OCR model is built only to handle individual characters; so before running 
-the preprocessing from the previous paragraph on it, the characters in each 
-word needed to be segmented. We had two different attempts at this and will 
+labelled using tesseract OCR and then manually checked after for errors. 
+The images have variable sizes and need to be resized to be uniform. 
+Be that as it may, our OCR model is built only to handle individual characters; 
+so, before running 
+the preprocessing from the previous paragraph that makes images suitable 
+for being passed to the model, the characters in each 
+word need to be segmented. We had two different attempts at this and will 
 describe both. 
 
-Our first, less successful segmentation, first grey scaled 
+Our first, less successful segmentation, grey scaled 
 the image, applied median blur to remove ``salt and pepper'' noise, 
-applied inverse binary threshold using Otsu's method, and dilated the image 
-to make the characters larger in the vertical direction. 
+applied inverse binary threshold using Otsu's method to automatically find the 
+optimal threshold value/limit, and dilated the image 
+to make the characters larger in the vertical direction.
 We then found the contours of each character and drew bounding boxes around 
 them. The dilation was meant to preserve the gap between characters, which 
 manifested horizontally, and remove any ``intra-character'' space, such as 
 the hole in an ``a'' or the large amount of space in the column a ``u'' takes 
-up so that all characters looked roughly like rectangular blobs. Finally, we used 
-the dimensions of each bounding box to crop out the 
-characters from the original image and return an array of images containing each 
+up so that all characters looked roughly like rectangular blobs. We do this so 
+that the contours algorithm finds a single contour (the contour of the rectangle
+blob) for each letter, allowing us to detect each individual character. 
+Finally, we used the dimensions of each contour to draw a bounding boxes them
+and crop out the 
+characters from the original image using them. Hence, we return an array of 
+images containing each 
 character. One large flaw of this approach is that if the dilation did not 
 remove all the space in a character's rough column location, then multiple 
 contours would be drawn in that column. This would mean, for example, that 
@@ -547,12 +575,12 @@ data suitable for inputting into the SVM. Lastly, he did troubleshooting for GPU
     \label{fig:confusion_matrix}
 \end{figure}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\textwidth]{cnn_confusion_matrix.png}
-    \caption{CNN Confusion Matrix}
-    \label{fig:CNN_confusion_matrix}
-\end{figure}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{cnn_confusion_matrix.png}
+%     \caption{CNN Confusion Matrix}
+%     \label{fig:CNN_confusion_matrix}
+% \end{figure}
 
 \begin{table}[H]
   % \centering
