@@ -332,8 +332,47 @@ implemented a known method for segmenting text obtianed from online research int
 
 % \section{chat}
 \begin{itemize} 
-\item Need to figure out
+\item Need to figure out LOCK INNNNNNNNNN
 \end{itemize}
+
+Specifically for the Words MNIST data, one large source of errors was the 
+segmentation used for splitting words up into characters. The dataset contains 
+many images of words with different fonts and thus the gaps between characters 
+also vary. Fonts which have the characters pressed up against each other 
+leads the PSC algorithm treat those two different characters as one character
+and thus output them in one image. For example, the word displayed here:
+\begin{center}
+  \includegraphics[scale=0.5]{still.jpeg}  
+\end{center}
+is segmented normally until the two ``L''s. These two ``L''s are segmented 
+into one word as such:
+\begin{center}
+  \includegraphics[scale=0.5]{LL.png}  
+\end{center}
+leading to the model misclassifying this image. Another common problem are the 
+cases of ``u''s and ``n''s. The section of these two letters that connect the 
+vertical segments are often very thin; so, the thinning on characters 
+done in the algorithm often makes that section so thin that the PSC algorithm
+mistakenly selects columns in between the vertical segments as segmentation
+columns. We use the example of the word ``unsatisfactory''':
+\begin{center}
+  \includegraphics[scale=0.5]{unsatisfactory.png} 
+\end{center}
+Even though ``r'' and ``y'' are touching in this image, they are still segmented
+correctly. However, both ``u'' and ``n'' are not segmented correctly. 
+\begin{center}
+  \includegraphics[scale=0.4]{left-half-u.png} 
+  \includegraphics[scale=0.4]{right-half-u.png} 
+\end{center}
+\begin{center}
+  \includegraphics[scale=0.4]{left-half-n.png} 
+  \includegraphics[scale=0.4]{right-half-n.png} 
+\end{center}
+As can be seen here, both of these characters are segmented into two images, 
+adding 4 extra incorrect characters that are passed to the model. Issues like 
+the two above can and do occur; they result in the model being passed poor data 
+and often incorrectly classifying the words. 
+
 
 % \section{Template Notes}
 

@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764891117.37319 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764891118.70099 0
-  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764891117.0048 21118 0f42a16306c01d0271758a877b581fab ""
+["pdflatex"] 1764894641.44013 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764894642.75771 0
+  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764894641.03096 23046 ca507da8e856bfc2c63288f5db889204 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1755987285 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1755987285 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -104,11 +104,18 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1755987285 42087 b0f9697c952c8f5a8eede4134282cb0d ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1762797982 5306876 69c328245ae101f6bc10b01e1f2bf9d5 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1762797917 2008249 7a70b0a3583c91cefbdb0c10d74d2473 ""
-  "acl.sty" 1764874011.12048 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "main.aux" 1764891118.5668 1389 20c5dfc25937014b33c6ac2d02b154b5 "pdflatex"
-  "main.out" 1764891118.5668 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
-  "main.tex" 1764891117.0048 21118 0f42a16306c01d0271758a877b581fab ""
-  "mistral-benchmarks.png" 1764877709.71791 297774 15a21d473371b764bab8a0e1a1d4ae57 ""
+  "LL.png" 1764892359.60082 2541 007620fc188874dcba8837068ffbbe73 ""
+  "acl.sty" 1764893031.8429 11615 e2c027f483aa40e577ed34264c8b0655 ""
+  "left-half-n.png" 1764892982.06092 13875 717c1a351e6502009db9f384507982ef ""
+  "left-half-u.png" 1764892976.4328 13891 dfc8ae031044840424b6d74b1cf1a384 ""
+  "main.aux" 1764894642.64598 1389 20c5dfc25937014b33c6ac2d02b154b5 "pdflatex"
+  "main.out" 1764894642.64698 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
+  "main.tex" 1764894641.03096 23046 ca507da8e856bfc2c63288f5db889204 ""
+  "mistral-benchmarks.png" 1764893031.85408 297774 15a21d473371b764bab8a0e1a1d4ae57 ""
+  "right-half-n.png" 1764892983.22595 13924 161498020057bb835d672c12237b6b7d ""
+  "right-half-u.png" 1764892980.20788 14020 b58d94f5909909b1508a90e30be1b538 ""
+  "still.jpeg" 1764891993.76075 4983 021bf322971741f7c9d5eaa74a0a6cc3 ""
+  "unsatisfactory.png" 1764892936.75493 13705 f9d384ac83e540f4058147cf1d00018b ""
   (generated)
   "main.aux"
   "main.log"
