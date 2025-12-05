@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764902104.41966 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764902111.12296 0
-  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764902103.97252 38127 7c73bd41431289d636f8b57553309c21 ""
+["pdflatex"] 1764902750.67453 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764902757.42429 0
+  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764902750.33699 38927 8a5ad4fddea9e9265cbba2d180d01847 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1755987285 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1755987285 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -111,9 +111,9 @@
   "confusion_matrix.png" 1764901016.63496 599330 1a35601a5d2fd15f3ce924b29bf4d98b ""
   "left-half-n.png" 1764901016.63539 13875 717c1a351e6502009db9f384507982ef ""
   "left-half-u.png" 1764901016.63556 13891 dfc8ae031044840424b6d74b1cf1a384 ""
-  "main.aux" 1764902110.96852 2429 c93f564fe6c0bd71b5c0c0b94a633d30 "pdflatex"
-  "main.out" 1764902110.96952 869 94b68133666714215f8ae40701747d14 "pdflatex"
-  "main.tex" 1764902103.97252 38127 7c73bd41431289d636f8b57553309c21 ""
+  "main.aux" 1764902757.28611 2429 e43154e6bd96387ea8fdbdeefdf9da48 "pdflatex"
+  "main.out" 1764902757.28711 869 94b68133666714215f8ae40701747d14 "pdflatex"
+  "main.tex" 1764902750.33699 38927 8a5ad4fddea9e9265cbba2d180d01847 ""
   "mistral-benchmarks.png" 1764901016.64569 297774 15a21d473371b764bab8a0e1a1d4ae57 ""
   "original-you.png" 1764900990.1492 12257 60c7e206d8f2dab2485fffe7d2ae7139 ""
   "right-half-n.png" 1764901016.6459 13924 161498020057bb835d672c12237b6b7d ""

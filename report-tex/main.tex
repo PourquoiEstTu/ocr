@@ -226,16 +226,23 @@ correctly segment characters when vertical gaps exist) and better quality.
 \section{Features and Inputs}
 
 \hspace{\parindent}The inputs to the current model are 64x64 dimension 
-images. In our final version of our model, no feature engineering, 
+images. In the final version of our model, no feature engineering, 
 representation learning, feature selection, or augmentation was done. The 
 preprocessing as described above was done and then the image(s) were fed 
 into the model. We chose to do this as this is how images are normally fed into 
-a convolutional neural network (CNN). 
+a convolutional neural network (CNN). Our datasets were diverse in the fonts 
+they used, so there are a good few words that are slanted, have curving and
+curling line segments. Due to this diversity, we decided not do feature 
+augmentation. Another reason is that we expect users to input images in the 
+correct orientation. Although it is very much possible to not do as such 
+(we are very much aware users often do not follow the expectations of developers),
+we wanted to solely focus on increasing accuracy for ``normal'' text.
 
 Before we finalized our model, we used a different 
 set of features. Originally, we generated Histogram of Oriented Gradients 
-(HOG) features to feed our model. This is feature engineering technique that 
-is used for object detection. Due to this, we chose to use it for our early 
+(HOG) features to feed our model. This is an old and established feature 
+engineering technique that can be used for object detection. Due to this, we 
+chose to use it for our early 
 models. The HOG features were varied by changing the parameters that define 
 how they are generated. For example, the number of cells/boxes that features
 are calculated for (gradients are calculated for each cell and cells represent 
@@ -247,6 +254,10 @@ calculated for the image (a smaller cell size means more cells are needed to
 cover the image and gradients are calculated for each cell). Conversely, the 
 cell size being increased can 
 greatly decrease the size of each feature since less gradients are calculated.
+When we were training on our personal devices, we tended to go with lower 
+cell sizes and thus lower feature counts due to Random Access Memory (RAM) 
+constraints. When training on one of McMaster's GPU clusters, we increased 
+the cell size and thus the feature count accordingly.
 
 \section{Implementation}
 
@@ -322,7 +333,7 @@ their model against others on a variety of benchmarks including how well
 tables and math can be scanned, but we will use their benchmarks for recognizing
 words from different languages only. 
 \begin{center}
-  \includegraphics[scale=0.25]{mistral-benchmarks.png}
+  \includegraphics[scale=0.2]{mistral-benchmarks.png}
 \end{center}
 % \begin{figure}[htbp]
 %     \centering
