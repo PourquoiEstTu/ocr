@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764894641.44013 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764894642.75771 0
-  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764894641.03096 23046 ca507da8e856bfc2c63288f5db889204 ""
+["pdflatex"] 1764894797.12511 "/home/pourquoi/repos/ocr/report-tex/main.tex" "main.pdf" "main" 1764894798.53433 0
+  "/home/pourquoi/repos/ocr/report-tex/main.tex" 1764894795.26014 30727 f386b412a282f5d4c8436df350615c56 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1755987285 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1755987285 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -22,7 +22,9 @@
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1755987285 1120 8b7d695260f3cff42e636090a8002094 ""
   "/usr/share/texmf-dist/fonts/tfm/public/inconsolata/t1-zi4r-0.tfm" 1755987285 1328 8f7396ab15954094ca9576957bd516dd ""
   "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm" 1755987285 520 82a3d37183f34b6eb363a161dfc002c2 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy5.tfm" 1755987285 520 d082ac03a1087bc1ec2a06e24a9f68c0 ""
   "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy6.tfm" 1755987285 520 4889cce2180234b97cad636b6039c722 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy7.tfm" 1755987285 520 a74c6ed8cb48679fdc3ea874d9d34a7e ""
   "/usr/share/texmf-dist/fonts/tfm/public/latex-fonts/lasy8.tfm" 1755987285 520 7bb3abb160b19e0ed6ac404bb59052b7 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1755987285 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1755987285 35752 024fb6c41858982481f6968b5fc26508 ""
@@ -108,9 +110,9 @@
   "acl.sty" 1764893031.8429 11615 e2c027f483aa40e577ed34264c8b0655 ""
   "left-half-n.png" 1764892982.06092 13875 717c1a351e6502009db9f384507982ef ""
   "left-half-u.png" 1764892976.4328 13891 dfc8ae031044840424b6d74b1cf1a384 ""
-  "main.aux" 1764894642.64598 1389 20c5dfc25937014b33c6ac2d02b154b5 "pdflatex"
-  "main.out" 1764894642.64698 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
-  "main.tex" 1764894641.03096 23046 ca507da8e856bfc2c63288f5db889204 ""
+  "main.aux" 1764894798.42518 1885 23b9b8612ee73b9c053c0572b363fc38 "pdflatex"
+  "main.out" 1764894798.42518 857 25cdfeeda6a1b03613ff5c55a92121af "pdflatex"
+  "main.tex" 1764894795.26014 30727 f386b412a282f5d4c8436df350615c56 ""
   "mistral-benchmarks.png" 1764893031.85408 297774 15a21d473371b764bab8a0e1a1d4ae57 ""
   "right-half-n.png" 1764892983.22595 13924 161498020057bb835d672c12237b6b7d ""
   "right-half-u.png" 1764892980.20788 14020 b58d94f5909909b1508a90e30be1b538 ""

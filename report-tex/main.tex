@@ -329,12 +329,36 @@ We visualized our metrics more to be able to understand and compare the models w
 We slightly diverged from the plan of using a pretrained models or a existing library, instead we 
 implemented a known method for segmenting text obtianed from online research into own code. 
 \section{Error Analysis}
+\subsection*{Results and Analysis}
+Looking the confusion matrix generated for validation set of HOG model, seen in (link). (link) shows both the classes 
+which are most misclassified and correctly classified. Looking the graph we can see that the classes '0'/'O', '1'/'I', 
+and 'n'/'r'  are often misclassified as each other, which makes sense as they share very similar shapes, and therefore 
+will have very similar HOG features. 
 
 % \section{chat}
 \begin{itemize} 
 \item Need to figure out LOCK INNNNNNNNNN
 \end{itemize}
+The confusion matrix generated for the CNN model can be seen (link). (link) shows a similar pattern as the HOG model, 
+but is ran with a significantly larger dataset therefore results seem quite different. Looking at the graph, 
+we can continue to see the pattern of classes '0'/'O' being incorrectly classified, once again due to their 
+similar shapes. We can also see new errors such as 'c'/'C', 'l'/'I', or ''/''.
 
+However, a clear difference found is that the CNN model performs much better at classifying 'n'/'r' and '1'/'I' 
+as there are almost no mix up between the two. This could either be a reason from having a better dataset (typed 
+letters have more clear distinct features), because of the CNN architecture, or both.
+
+\subsection*{Potential Solutions}
+To address the issue of '0'/'O' and uppercase/lowercase misclassifications, one potential improvement is to 
+increase the resolution of the input images. Our current 64×64 inputs may be too low to capture the subtle 
+stroke differences between similar characters such as O vs 0 or C vs c. Increasing this to 96×96 or higher 
+could give the model more detailed visual information to learn from. Incorporating data augmentation during 
+training would also help the model generalize better by exposing it to variations in rotation, brightness, 
+and slight distortions. Additionally, reducing the amount of "downsampling", or compression in our CNN 
+architecture may help preserve important fine grained features, allowing the network to retain more shape 
+information needed to distinguish similar characters.
+
+\subsection*{Segmentation Errors}
 Specifically for the Words MNIST data, one large source of errors was the 
 segmentation used for splitting words up into characters. The dataset contains 
 many images of words with different fonts and thus the gaps between characters 
@@ -477,7 +501,117 @@ and often incorrectly classifying the words.
 
 
 
+\clearpage
 \section{Figures and Tables}
+
+\begin{table}[H]
+  % \centering
+  \scriptsize  % Smallest font size
+  \setlength{\tabcolsep}{2pt}
+  \begin{tabular}{lcccc|lcccc}
+    \hline
+    \textbf{Class} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{Sup.} &
+    \textbf{Class} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{Sup.} \\
+    \hline
+    0 & 0.33 & 0.50 & 0.40 & 8 & a & 0.56 & 0.38 & 0.45 & 13 \\
+    1 & 0.46 & 0.50 & 0.48 & 12 & b & 0.73 & 0.80 & 0.76 & 10 \\
+    2 & 0.79 & 0.79 & 0.79 & 14 & c & 0.36 & 0.50 & 0.42 & 8 \\
+    3 & 0.70 & 0.78 & 0.74 & 9 & d & 0.64 & 0.82 & 0.72 & 11 \\
+    4 & 0.80 & 0.53 & 0.64 & 15 & e & 0.89 & 0.80 & 0.84 & 10 \\
+    5 & 0.91 & 0.77 & 0.83 & 13 & f & 0.78 & 0.70 & 0.74 & 10 \\
+    6 & 0.64 & 0.70 & 0.67 & 10 & g & 0.33 & 0.44 & 0.38 & 9 \\
+    7 & 0.82 & 0.78 & 0.80 & 18 & h & 0.45 & 0.50 & 0.48 & 10 \\
+    8 & 0.58 & 0.88 & 0.70 & 8 & i & 0.78 & 0.54 & 0.64 & 13 \\
+    9 & 0.58 & 0.78 & 0.67 & 9 & j & 0.78 & 0.58 & 0.67 & 12 \\
+    A & 0.80 & 0.80 & 0.80 & 15 & k & 1.00 & 0.60 & 0.75 & 10 \\
+    B & 0.83 & 0.56 & 0.67 & 9 & l & 0.38 & 0.56 & 0.45 & 9 \\
+    C & 0.78 & 0.78 & 0.78 & 18 & m & 0.56 & 0.42 & 0.48 & 12 \\
+    D & 0.89 & 0.73 & 0.80 & 11 & n & 0.29 & 0.44 & 0.35 & 9 \\
+    E & 0.89 & 0.80 & 0.84 & 10 & o & 0.67 & 0.71 & 0.69 & 14 \\
+    F & 0.85 & 0.79 & 0.81 & 14 & p & 0.53 & 0.62 & 0.57 & 13 \\
+    G & 0.92 & 0.85 & 0.88 & 13 & q & 0.75 & 0.50 & 0.60 & 12 \\
+    H & 0.86 & 0.92 & 0.89 & 13 & r & 0.50 & 0.33 & 0.40 & 15 \\
+    I & 0.31 & 0.56 & 0.40 & 9 & s & 0.67 & 0.31 & 0.42 & 13 \\
+    J & 0.93 & 0.93 & 0.93 & 14 & t & 1.00 & 0.62 & 0.77 & 8 \\
+    K & 0.71 & 0.71 & 0.71 & 7 & u & 0.54 & 0.58 & 0.56 & 12 \\
+    L & 0.91 & 0.83 & 0.87 & 12 & v & 0.42 & 0.56 & 0.48 & 9 \\
+    M & 0.83 & 0.71 & 0.77 & 7 & w & 0.62 & 0.50 & 0.56 & 10 \\
+    N & 0.64 & 0.82 & 0.72 & 11 & x & 0.42 & 0.56 & 0.48 & 9 \\
+    O & 0.44 & 0.50 & 0.47 & 8 & y & 0.77 & 0.62 & 0.69 & 16 \\
+    P & 0.73 & 1.00 & 0.85 & 11 & z & 0.46 & 0.67 & 0.55 & 9 \\
+    Q & 0.88 & 0.78 & 0.82 & 9 & & & & & \\
+    R & 1.00 & 0.83 & 0.91 & 6 & & & & & \\
+    S & 0.64 & 0.88 & 0.74 & 8 & & & & & \\
+    T & 1.00 & 0.90 & 0.95 & 10 & & & & & \\
+    U & 0.56 & 0.83 & 0.67 & 6 & & & & & \\
+    V & 0.64 & 0.70 & 0.67 & 10 & & & & & \\
+    W & 0.78 & 0.58 & 0.67 & 12 & & & & & \\
+    X & 0.73 & 0.62 & 0.67 & 13 & & & & & \\
+    Y & 0.70 & 0.58 & 0.64 & 12 & & & & & \\
+    Z & 0.69 & 0.75 & 0.72 & 12 & & & & & \\
+    \hline
+    \multicolumn{10}{l}{\textbf{Accuracy: 67\%}} \textbf{Macro Avg:} Prec=0.68 \textbf{Weighted Avg:} Prec=0.70\\
+    % textbf{Macro Avg:} Prec=0.68, Rec=0.67, F1=0.66 | \textbf{Weighted Avg:} Prec=0.70, Rec=0.67, F1=0.67 | 
+    \hline
+  \end{tabular}
+  % \caption{Per-class classification metrics on validation set (n=682)}
+  \caption{HOG classification metrics}
+  \label{tab:old_results}
+\end{table}
+
+
+\begin{table}[H]
+  % \centering
+  \scriptsize
+  \setlength{\tabcolsep}{2pt}
+  \begin{tabular}{lcccc|lcccc}
+    \hline
+    \textbf{Class} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{Sup.} &
+    \textbf{Class} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{Sup.} \\
+    \hline
+    0 & 0.69 & 0.43 & 0.53 & 699 & a & 0.93 & 0.94 & 0.94 & 643 \\
+    1 & 0.95 & 0.87 & 0.91 & 688 & b & 0.97 & 0.92 & 0.94 & 677 \\
+    2 & 0.99 & 0.95 & 0.97 & 729 & c & 0.86 & 0.92 & 0.89 & 669 \\
+    3 & 0.98 & 0.95 & 0.96 & 745 & d & 0.98 & 0.93 & 0.96 & 647 \\
+    4 & 0.97 & 0.95 & 0.96 & 712 & e & 0.95 & 0.95 & 0.95 & 623 \\
+    5 & 0.98 & 0.95 & 0.96 & 680 & f & 0.95 & 0.94 & 0.95 & 620 \\
+    6 & 0.98 & 0.94 & 0.96 & 693 & g & 0.95 & 0.93 & 0.94 & 642 \\
+    7 & 0.94 & 0.96 & 0.95 & 699 & h & 0.97 & 0.92 & 0.95 & 635 \\
+    8 & 0.75 & 0.94 & 0.84 & 697 & i & 0.95 & 0.95 & 0.95 & 647 \\
+    9 & 0.96 & 0.94 & 0.95 & 702 & j & 0.87 & 0.96 & 0.91 & 660 \\
+    A & 0.95 & 0.91 & 0.93 & 688 & k & 0.98 & 0.93 & 0.96 & 603 \\
+    B & 0.94 & 0.93 & 0.94 & 673 & l & 0.80 & 0.53 & 0.64 & 636 \\
+    C & 0.91 & 0.80 & 0.85 & 667 & m & 0.95 & 0.96 & 0.95 & 678 \\
+    D & 0.92 & 0.92 & 0.92 & 695 & n & 0.94 & 0.96 & 0.95 & 645 \\
+    E & 0.86 & 0.92 & 0.89 & 706 & o & 0.83 & 0.83 & 0.83 & 666 \\
+    F & 0.94 & 0.92 & 0.93 & 680 & p & 0.96 & 0.90 & 0.93 & 660 \\
+    G & 0.90 & 0.92 & 0.91 & 706 & q & 0.94 & 0.93 & 0.93 & 689 \\
+    H & 0.77 & 0.92 & 0.84 & 721 & r & 0.93 & 0.94 & 0.94 & 642 \\
+    I & 0.56 & 0.88 & 0.68 & 680 & s & 0.92 & 0.86 & 0.89 & 652 \\
+    J & 0.96 & 0.84 & 0.90 & 693 & t & 0.97 & 0.94 & 0.95 & 658 \\
+    K & 0.92 & 0.94 & 0.93 & 686 & u & 0.97 & 0.92 & 0.94 & 626 \\
+    L & 0.93 & 0.89 & 0.91 & 713 & v & 0.90 & 0.88 & 0.89 & 642 \\
+    M & 0.95 & 0.88 & 0.92 & 714 & w & 0.92 & 0.89 & 0.90 & 647 \\
+    N & 0.93 & 0.91 & 0.92 & 759 & x & 0.89 & 0.93 & 0.91 & 629 \\
+    O & 0.46 & 0.87 & 0.60 & 672 & y & 0.94 & 0.95 & 0.94 & 696 \\
+    P & 0.91 & 0.92 & 0.92 & 723 & z & 0.91 & 0.86 & 0.89 & 648 \\
+    Q & 0.96 & 0.89 & 0.93 & 728 &  &  &  &  &  \\
+    R & 0.95 & 0.92 & 0.94 & 720 &  &  &  &  &  \\
+    S & 0.85 & 0.87 & 0.86 & 680 &  &  &  &  &  \\
+    T & 0.96 & 0.91 & 0.93 & 694 &  &  &  &  &  \\
+    U & 0.92 & 0.89 & 0.91 & 701 &  &  &  &  &  \\
+    V & 0.89 & 0.86 & 0.88 & 701 &  &  &  &  &  \\
+    W & 0.89 & 0.87 & 0.88 & 689 &  &  &  &  &  \\
+    X & 0.95 & 0.82 & 0.88 & 679 &  &  &  &  &  \\
+    Y & 0.95 & 0.86 & 0.90 & 703 &  &  &  &  &  \\
+    Z & 0.82 & 0.88 & 0.85 & 651 &  &  &  &  &  \\
+        \hline
+    \multicolumn{10}{l}{\textbf{Accuracy: 90\%}} \textbf{Macro Avg:} Prec=0.91 \textbf{Weighted Avg:} Prec=0.91\\
+    \hline
+  \end{tabular}
+  \caption{CNN Model Metrics}
+  \label{tab:new_results}
+\end{table}
 
 \clearpage
 

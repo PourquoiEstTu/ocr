@@ -49,10 +49,10 @@ gammaCorrection = 1
 nlevels = 64
 useSignedGradients = False
 
-# hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
-#     cellSize,nbins,derivAperture,
-#     winSigma,histogramNormType,L2HysThreshold,
-#     gammaCorrection,nlevels, useSignedGradients)
+hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
+    cellSize,nbins,derivAperture,
+    winSigma,histogramNormType,L2HysThreshold,
+    gammaCorrection,nlevels, useSignedGradients)
 
 def gen_hog_features(input_dir:str, output_dir:str,
                         overwrite_prev_files: bool=False) -> None :
@@ -65,9 +65,11 @@ def gen_hog_features(input_dir:str, output_dir:str,
                     continue
             img = cv2.imread(f"{input_dir}/{file.name}",0)
             descriptor = hog.compute(img)
+            print(descriptor.shape)
+            return
             np.save(npy_path, descriptor)
             print(f"Saved HOG features: {npy_path}")
-# gen_hog_features(DATA, FEATURE_DIR, True)
+gen_hog_features(DATA, FEATURE_DIR, True)
 
 def gen_hog_labels(csv_file:str, feature_dir:str, output_dir:str,
                         overwrite_prev_file: bool=False) -> None :
@@ -221,10 +223,10 @@ def potential_segmentation_columns(img_path: str) :
         char = og_img[0:h, seg_col_locations[i]:seg_col_locations[i+1]]
         characters.append(char)
     # visualization for each individual character
-    # for char in characters :
-        # print(char.shape)
-        # cv2.imshow('', char)
-        # k = cv2.waitKey(100000)
+    for char in characters :
+        print(char.shape)
+        cv2.imshow('', char)
+        k = cv2.waitKey(100000)
     # visualization for whole image
     # while 1 :
     #     cv2.imshow('', og_img)
@@ -246,3 +248,4 @@ def potential_segmentation_columns(img_path: str) :
 # potential_segmentation_columns(f"{MNIST_DATA}/61.png")
 # potential_segmentation_columns(f"{MNIST_DATA}/63.jpeg") 
 # potential_segmentation_columns(f"{MNIST_DATA}/65.png")
+# potential_segmentation_columns(f"{MNIST_DATA}/271.jpeg")
