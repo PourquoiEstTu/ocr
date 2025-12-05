@@ -221,16 +221,11 @@ INPUT ./mistral-benchmarks.png
 INPUT ./mistral-benchmarks.png
 INPUT ./mistral-benchmarks.png
 INPUT ./mistral-benchmarks.png
-INPUT /usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-INPUT /usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-INPUT /usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-INPUT /usr/share/texmf-dist/fonts/tfm/adobe/times/ptmr8c.tfm
 INPUT ./still.jpeg
 INPUT ./still.jpeg
 INPUT ./still.jpeg
 INPUT ./still.jpeg
 INPUT ./still.jpeg
-INPUT /usr/share/texmf-dist/fonts/vf/adobe/times/ptmr8c.vf
 INPUT ./LL.png
 INPUT ./LL.png
 INPUT ./LL.png
