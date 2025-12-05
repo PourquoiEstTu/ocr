@@ -88,16 +88,26 @@ if __name__ == "__main__":
     np.random.shuffle(idx)
     X, y, file_names = X[idx], np.array(y)[idx], np.array(file_names)[idx]
 
-    # Train-test split (80/20)
-    split = int(len(X) * 0.8)
-    X_train, X_test = X[:split], X[split:]
-    y_train_raw, y_test_raw = y[:split], y[split:]
-    test_file_names = file_names[split:]
+    # # Train-test split (80/20)
+    # split = int(len(X) * 0.8)
+    # X_train, X_test = X[:split], X[split:]
+    # y_train_raw, y_test_raw = y[:split], y[split:]
+    # test_file_names = file_names[split:]
+
+    # Train-test-val split (80/10/10)
+    split1 = int(len(X) * 0.8)
+    split2 = int(len(X) * 0.9)
+    X_train, X_val, X_test = X[:split1], X[split1:split2], X[split2:]
+    y_train_raw, y_val_raw, y_test_raw = y[:split1], y[split1:split2], y[split2:] 
+    val_file_names = file_names[split1:split2]
+    test_file_names = file_names[split2:]
+    # print(f"Train samples: {len(X_train)} | Val samples: {len(X_val)} | Test samples: {len(X_test)}")
 
     # Label encoding
     le = LabelEncoder()
     y_train = le.fit_transform(y_train_raw)
     y_test = le.transform(y_test_raw)
+    y_val = le.transform(y_val_raw)
 
     num_classes = len(le.classes_)
 
@@ -106,19 +116,24 @@ if __name__ == "__main__":
     X_test = torch.tensor(X_test, dtype=torch.float32)
     y_train = torch.tensor(y_train, dtype=torch.long)
     y_test = torch.tensor(y_test, dtype=torch.long)
+    y_val = torch.tensor(y_val, dtype=torch.long)
+    X_val = torch.tensor(X_val, dtype=torch.float32)
 
     # CNN expects (B,1,H,W)
     # If images are 32×32 pixels:
     X_train = X_train.view(-1, 1, dimension, dimension)
     X_test = X_test.view(-1, 1, dimension, dimension)
+    X_val = X_val.view(-1, 1, dimension, dimension)
 
     X_train, y_train = X_train.to(DEVICE), y_train.to(DEVICE)
     X_test, y_test = X_test.to(DEVICE), y_test.to(DEVICE)
+    X_val, y_val = X_val.to(DEVICE), y_val.to(DEVICE)
 
     # Dataloaders
     batch_size = 16
     train_loader = DataLoader(TensorDataset(X_train, y_train), batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(TensorDataset(X_test, y_test), batch_size=batch_size)
+    # test_loader = DataLoader(TensorDataset(X_test, y_test), batch_size=batch_size)
+    val_loader = DataLoader(TensorDataset(X_val, y_val), batch_size=batch_size)
 
     # Model
     model = CNNModel(out_size=num_classes).to(DEVICE)
@@ -133,6 +148,10 @@ if __name__ == "__main__":
     patience = 10
     patience_counter = 0
 
+    # keep track of training history
+    train_losses = []
+    val_losses = []
+
     for epoch in range(epochs):
         model.train()
         running_loss = 0
@@ -146,6 +165,7 @@ if __name__ == "__main__":
             running_loss += loss.item() * Xb.size(0)
 
         train_loss = running_loss / len(train_loader.dataset)
+        train_losses.append(train_loss)
 
         # Eval on test set
         model.eval()
@@ -154,7 +174,7 @@ if __name__ == "__main__":
         test_loss = 0
 
         with torch.inference_mode():
-            for Xb, yb in test_loader:
+            for Xb, yb in val_loader:
                 logits = model(Xb)
                 loss = loss_fn(logits, yb)
                 test_loss += loss.item() * Xb.size(0)
@@ -163,8 +183,9 @@ if __name__ == "__main__":
                 correct += (preds == yb).sum().item()
                 total += yb.size(0)
 
-        test_loss /= len(test_loader.dataset)
+        test_loss /= len(val_loader.dataset)
         test_acc = correct / total * 100
+        val_losses.append(test_loss)
 
         # Early stopping
         if test_acc > best_acc:
@@ -213,7 +234,7 @@ if __name__ == "__main__":
     cm = confusion_matrix(true_labels, pred_labels)
     cm_df = pd.DataFrame(cm, index=le.classes_, columns=le.classes_)
 
-    plt.figure(figsize=(14, 12))
+    plt.figure(figsize=(19, 17))
     sns.heatmap(cm_df, annot=True, cmap='Blues', fmt='g')
     plt.title("Character Confusion Matrix")
     plt.ylabel("True Label")
@@ -221,4 +242,30 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.savefig("./confusion_matrix.png", dpi=300)
 
-    print("Training complete.")
+    # # print("Training complete.")
+    # cm = confusion_matrix(true_labels, pred_labels)
+
+    # # Normalize by true class (row)
+    # cm_percent = cm.astype(float) / cm.sum(axis=1, keepdims=True)
+
+    # cm_df = pd.DataFrame(cm_percent, index=le.classes_, columns=le.classes_)
+
+    # plt.figure(figsize=(25, 25))
+    # sns.heatmap(cm_df, annot=True, cmap='Blues', fmt='.2f')  # <<< %.2f for percentages
+    # plt.title("Character Confusion Matrix (Percent)")
+    # plt.ylabel("True Label")
+    # plt.xlabel("Predicted Label")
+    # plt.tight_layout()
+    # plt.savefig("./confusion_matrix_percent.png", dpi=300)
+    # print("Training complete.")
+
+    # graph training loss and validation loss
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, len(train_losses) + 1), train_losses, label='Training Loss')
+    plt.plot(range(1, len(val_losses) + 1), val_losses, label='Validation Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training and Validation Loss over Epochs')
+    plt.legend()
+    plt.grid()
+    plt.savefig("./loss_curve.png", dpi=300)
