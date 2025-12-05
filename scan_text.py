@@ -219,10 +219,12 @@ def load_MINST(valid_files, p, model=None, label_encoder=None, img_size=None):
         elif sum(1 for a, b in zip(predicted_words, data[x]) if a == b) >= len(data[x]) - 1:
             kinda_correct += 1
         # if char O is mispredicted as 0 or vice versa count it, or o and O mixup
-        for a, b in zip(predicted_words, data[x]):
-            if (a == 'o' and b == 'O') or (a == 'O' and b == 'o'):
-                O_case_conflict += 1
-                break
+        word_has_mixup = any(
+            (a == 'o' and b == 'O') or (a == 'O' and b == 'o')
+            for a, b in zip(predicted_words, data[x])
+        )
+        if word_has_mixup:
+            O_case_conflict += 1
         total += 1
     print(f"Final Accuracy on MNIST words: {correct}/{total} = {correct/total*100:.2f}%")
     print(f"Kinda Correct (1 char off okay) on MNIST words: {correct + kinda_correct}/{total} = {(correct + kinda_correct)/total*100:.2f}%")
@@ -239,6 +241,9 @@ def test_on_MINST():
     valid_MNIST_words = filter_MNIST("/u50/chandd9/al3/MNIST_dataset/v011_words_small/v011_labels_small.json")
     load_MINST(valid_MNIST_words, "/u50/chandd9/al3/MNIST_dataset/v011_words_small/v011_labels_small.json", model, label_encoder, img_size)
 
+    # graph statistics if needed
+
+
 def single_file_test():
     if len(sys.argv) != 2:
         print("Usage: python scan_text.py <image_path>")
@@ -253,7 +258,7 @@ def single_file_test():
     model.to(device)
     label_encoder = load_label_encoder()
 
-    predicted_words = predict_word(image_path, model, label_encoder, img_size)
+    predicted_words, _ = predict_word(image_path, model, label_encoder, img_size)
 
     # print(f"Predicted class index: {pred_idx}")
     print(f"Predicted label: {predicted_words}")
